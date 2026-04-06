@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>頸部・体幹 ROM＋MMT クイズ</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: #f0f4f8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 12px 40px;
+    color: #2d3748;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    width: 100%;
+    max-width: 640px;
+    background: #1a4a5c;
+    border-radius: 14px 14px 0 0;
+    padding: 16px 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .app-header .series { font-size: 11px; color: #c8dce2; letter-spacing: 0.08em; }
+  .app-header h1 { font-size: 17px; color: #fff; font-weight: 700; line-height: 1.4; }
+  .app-header .meta { font-size: 11px; color: #9eb8c4; margin-top: 2px; }
+
+  /* ── Card ── */
+  .card {
+    width: 100%;
+    max-width: 640px;
+    background: #fff;
+    border-radius: 0 0 14px 14px;
+    padding: 20px 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    margin-bottom: 8px;
+  }
+
+  /* ── Name screen ── */
+  #name-screen label { font-size: 13px; color: #4a5568; display: block; margin-bottom: 6px; }
+  #name-screen input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  #name-screen input:focus { border-color: #2e6b80; }
+  .name-warn { font-size: 12px; color: #c0543a; margin-top: 5px; min-height: 16px; }
+
+  /* ── Progress ── */
+  .progress-wrap { margin-bottom: 14px; }
+  .progress-label { font-size: 11px; color: #718096; margin-bottom: 4px; }
+  .progress-bar { height: 5px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg,#2e6b80,#1a4a5c); border-radius: 3px; transition: width .4s ease; }
+
+  /* ── Question ── */
+  .q-tag { display: inline-block; background: #eef4f7; color: #2e6b80; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; }
+  .q-text { font-size: 15px; font-weight: 600; line-height: 1.65; color: #2d3748; margin-bottom: 16px; }
+  .q-note { font-size: 11.5px; color: #718096; background: #f7f9fa; border-left: 3px solid #c8dce2; padding: 6px 10px; border-radius: 0 6px 6px 0; margin-bottom: 14px; line-height: 1.6; }
+
+  /* ── Choices ── */
+  .choices { display: flex; flex-direction: column; gap: 9px; }
+  .choice-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px 14px;
+    border: 1.5px solid #cbd5e0;
+    border-radius: 9px;
+    background: #fff;
+    font-size: 14px;
+    color: #2d3748;
+    cursor: pointer;
+    line-height: 1.5;
+    transition: border-color .15s, background .15s;
+  }
+  .choice-btn:hover:not(:disabled) { border-color: #2e6b80; background: #f0f8fb; }
+  .choice-btn.correct { border-color: #38a169; background: #f0fff4; color: #276749; font-weight: 600; }
+  .choice-btn.wrong { border-color: #c0543a; background: #fff5f3; color: #9b2c2c; }
+  .choice-btn.reveal { border-color: #38a169; background: #f0fff4; color: #276749; }
+  .choice-btn:disabled { cursor: default; }
+
+  /* ── Explanation ── */
+  .explanation {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 9px;
+    font-size: 13px;
+    line-height: 1.75;
+    display: none;
+  }
+  .explanation.show { display: block; }
+  .explanation.correct-exp { background: #f0fff4; border: 1px solid #c6f6d5; color: #276749; }
+  .explanation.wrong-exp { background: #fff5f3; border: 1px solid #fed7cc; color: #7b341e; }
+  .exp-head { font-weight: 700; margin-bottom: 4px; }
+
+  /* ── Next btn ── */
+  .next-btn {
+    display: none;
+    width: 100%;
+    margin-top: 16px;
+    padding: 13px;
+    background: #1a4a5c;
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .next-btn:hover { background: #2e6b80; }
+  .next-btn.show { display: block; }
+
+  /* ── Result ── */
+  #result-screen { text-align: center; }
+  .result-score { font-size: 52px; font-weight: 700; color: #1a4a5c; line-height: 1; margin: 10px 0 4px; }
+  .result-denom { font-size: 18px; color: #718096; margin-bottom: 14px; }
+  .result-grade { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .result-msg { font-size: 13px; color: #4a5568; line-height: 1.7; margin-bottom: 20px; }
+  .result-bar-wrap { background: #e2e8f0; border-radius: 8px; height: 12px; overflow: hidden; margin-bottom: 20px; }
+  .result-bar { height: 100%; border-radius: 8px; background: linear-gradient(90deg,#2e6b80,#1a4a5c); transition: width 1s ease; }
+  .review-list { text-align: left; font-size: 12.5px; line-height: 1.8; color: #4a5568; background: #f7f9fa; border-radius: 9px; padding: 14px; margin-bottom: 4px; }
+  .review-list li { margin-bottom: 4px; }
+  .review-list .ok { color: #276749; }
+  .review-list .ng { color: #9b2c2c; }
+  .done-note { font-size: 11.5px; color: #718096; margin-top: 14px; }
+
+  /* ── Already done ── */
+  #done-screen { text-align: center; padding: 20px 0; }
+  #done-screen .done-icon { font-size: 40px; margin-bottom: 10px; }
+  #done-screen h2 { font-size: 18px; color: #1a4a5c; margin-bottom: 8px; }
+  #done-screen p { font-size: 13px; color: #4a5568; line-height: 1.7; }
+
+  /* ── Teacher menu ── */
+  .teacher-link { font-size: 11px; color: #a0aec0; text-align: right; cursor: pointer; margin-top: 4px; text-decoration: underline; }
+  #teacher-modal {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #teacher-modal.open { display: flex; }
+  .teacher-box {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px 20px;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  }
+  .teacher-box h3 { font-size: 15px; color: #1a4a5c; margin-bottom: 14px; }
+  .teacher-box input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 8px;
+    outline: none;
+  }
+  .teacher-box input:focus { border-color: #2e6b80; }
+  .t-btn {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-right: 6px;
+    margin-top: 4px;
+  }
+  .t-btn.primary { background: #1a4a5c; color: #fff; }
+  .t-btn.secondary { background: #e2e8f0; color: #2d3748; }
+  .t-btn.danger { background: #c0543a; color: #fff; }
+  #teacher-panel { display: none; margin-top: 14px; }
+  #teacher-panel .stat { font-size: 13px; color: #4a5568; margin-bottom: 10px; background: #f7f9fa; padding: 10px 12px; border-radius: 8px; line-height: 1.8; }
+  .t-warn { font-size: 11px; color: #c0543a; margin-top: 4px; }
+
+  /* ── Btn ── */
+  .primary-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: #1a4a5c;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background .15s;
+  }
+  .primary-btn:hover { background: #2e6b80; }
+  .primary-btn:disabled { background: #a0aec0; cursor: default; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="app-header">
+  <span class="series">老年期の理解シリーズ ｜ 運動器アセスメント</span>
+  <h1>頸部・体幹 ROM＋MMT クイズ</h1>
+  <span class="meta">全10問 ／ OT国家試験対策</span>
+</div>
+
+<!-- ── Main Card ── -->
+<div class="card" id="main-card">
+
+  <!-- 名前入力 -->
+  <div id="name-screen">
+    <label for="student-name">氏名を入力してください</label>
+    <input type="text" id="student-name" placeholder="例）山田 太郎" maxlength="20">
+    <p class="name-warn" id="name-warn"></p>
+    <button class="primary-btn" id="start-btn" onclick="startQuiz()">クイズを始める</button>
+  </div>
+
+  <!-- クイズ画面 -->
+  <div id="quiz-screen" style="display:none;">
+    <div class="progress-wrap">
+      <div class="progress-label" id="progress-label">問題 1 / 10</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="q-tag" id="q-tag">Q1</div>
+    <p class="q-text" id="q-text"></p>
+    <div class="q-note" id="q-note" style="display:none;"></div>
+    <div class="choices" id="choices"></div>
+    <div class="explanation" id="explanation"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">次の問題 →</button>
+  </div>
+
+  <!-- 結果画面 -->
+  <div id="result-screen" style="display:none;"></div>
+
+  <!-- 回答済み画面 -->
+  <div id="done-screen" style="display:none;">
+    <div class="done-icon">✅</div>
+    <h2>回答済みです</h2>
+    <p id="done-msg"></p>
+  </div>
+
+</div>
+
+<!-- Teacher link -->
+<div style="width:100%;max-width:640px;">
+  <span class="teacher-link" onclick="openTeacher()">教員メニュー</span>
+</div>
+
+<!-- Teacher modal -->
+<div id="teacher-modal">
+  <div class="teacher-box">
+    <h3>🔐 教員メニュー</h3>
+    <input type="password" id="t-pass" placeholder="パスワード" onkeydown="if(event.key==='Enter')checkPass()">
+    <p class="t-warn" id="t-warn"></p>
+    <div>
+      <button class="t-btn primary" onclick="checkPass()">ログイン</button>
+      <button class="t-btn secondary" onclick="closeTeacher()">閉じる</button>
+    </div>
+    <div id="teacher-panel">
+      <div class="stat" id="t-stat">読み込み中…</div>
+      <button class="t-btn primary" onclick="refreshStat()">🔄 更新</button>
+      <button class="t-btn danger" onclick="downloadCSV()">📥 CSVダウンロード</button>
+      <button class="t-btn secondary" onclick="closeTeacher()" style="margin-top:8px;">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// GAS URL（ここを実際のURLに変更してください）
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzdGzlEK6wYWE1DMK8fN1yrOPKsj5yBq1F7VPhSvDFrUCFxsoj794QmLngVd7tJm9ksnQ/exec";
+// ─────────────────────────────────────────────
+
+const QUIZ_KEY   = "quiz_done_" + document.title;
+const TEACHER_PW = "5948saya";
+
+// ── 問題データ ──────────────────────────────────
+const questions = [
+  {
+    q: "頸部屈曲の参考可動域として正しいのはどれか。",
+    note: "頸部の屈曲方向への参考可動域角度を選べ。",
+    choices: ["45°", "60°", "50°", "75°"],
+    answer: 1,
+    exp: "頸部屈曲の参考可動域は60°である。伸展は50°、側屈は50°（左右各）、回旋は60°（左右各）。"
+  },
+  {
+    q: "頸部回旋の参考可動域として正しいのはどれか。",
+    note: null,
+    choices: ["45°", "50°", "60°", "80°"],
+    answer: 2,
+    exp: "頸部回旋の参考可動域は60°（左右各）である。頸部側屈は50°、屈曲も60°。"
+  },
+  {
+    q: "頸部屈曲・伸展を測定する際の基本軸と移動軸の組合せとして正しいのはどれか。",
+    note: null,
+    choices: [
+      "基本軸：第7頸椎棘突起と第1仙椎を結ぶ線\n移動軸：頭頂と第7頸椎棘突起を結ぶ線",
+      "基本軸：肩峰を通る床への垂直線\n移動軸：外耳孔と頭頂を結ぶ線",
+      "基本軸：両側肩峰を結ぶ線\n移動軸：鼻梁と後頭結節を結ぶ線",
+      "基本軸：ヤコビー線中点に立てた垂直線\n移動軸：第1・第5腰椎棘突起を結ぶ線"
+    ],
+    answer: 1,
+    exp: "頸部屈曲・伸展：基本軸＝肩峰を通る床への垂直線、移動軸＝外耳孔と頭頂を結ぶ線。選択肢①は体幹側屈、③は頸部回旋、④は体幹側屈の軸。"
+  },
+  {
+    q: "頸部回旋を測定する際の基本軸として正しいのはどれか。",
+    note: null,
+    choices: [
+      "肩峰を通る床への垂直線",
+      "第7頸椎棘突起と第1仙椎を結ぶ線",
+      "両側肩峰を結ぶ線",
+      "ヤコビー線の中点に立てた垂直線"
+    ],
+    answer: 2,
+    exp: "頸部回旋の基本軸は「両側肩峰を結ぶ線」、移動軸は「鼻梁と後頭結節を結ぶ線」。①は頸部屈伸の基本軸、②は体幹側屈の基本軸、④は体幹側屈の基本軸（ヤコビー線）。"
+  },
+  {
+    q: "体幹屈曲の参考可動域として正しいのはどれか。",
+    note: null,
+    choices: ["30°", "45°", "60°", "90°"],
+    answer: 1,
+    exp: "体幹屈曲の参考可動域は45°。体幹伸展は30°、体幹側屈は50°（左右各）、体幹回旋は40°（左右各）。"
+  },
+  {
+    q: "体幹回旋の参考可動域として正しいのはどれか。",
+    note: null,
+    choices: ["30°", "40°", "50°", "60°"],
+    answer: 1,
+    exp: "体幹回旋の参考可動域は40°（左右各）。体幹側屈は50°、体幹屈曲は45°、体幹伸展は30°。"
+  },
+  {
+    q: "体幹側屈を測定する際の基本軸と移動軸の組合せとして正しいのはどれか。",
+    note: null,
+    choices: [
+      "基本軸：仙骨後面\n移動軸：第1・第5腰椎棘突起を結ぶ線",
+      "基本軸：両側後上腸骨棘を結ぶ線\n移動軸：両側肩峰を結ぶ線",
+      "基本軸：ヤコビー線の中点に立てた垂直線\n移動軸：第1・第5腰椎棘突起を結ぶ線",
+      "基本軸：肩峰を通る床への垂直線\n移動軸：外耳孔と頭頂を結ぶ線"
+    ],
+    answer: 2,
+    exp: "体幹側屈：基本軸＝ヤコビー線の中点に立てた垂直線、移動軸＝第1腰椎棘突起と第5腰椎棘突起を結ぶ線。①は体幹屈伸、②は体幹回旋、④は頸部屈伸の軸。"
+  },
+  {
+    q: "体幹屈曲のMMT Grade 3 の検査方法として正しいのはどれか。",
+    note: "股関節・膝関節を軽度屈曲位にした背臥位で実施する。",
+    choices: [
+      "両手を頭の後ろに組み、体幹を起こす",
+      "両上肢を前方に伸ばして、体幹を起こす",
+      "体幹を持ち上げようとするが肩甲骨が床から離れない",
+      "腹筋に収縮を触れるが可視的動きはない"
+    ],
+    answer: 1,
+    exp: "Grade 3：両上肢を前方に伸ばして（重力に抗して）体幹を起こせる。Grade 4/5は両手を頭の後ろに組んで起こす。Grade 2は肩甲骨が離れない。Grade 1は収縮のみ。"
+  },
+  {
+    q: "体幹伸展のMMT Grade 5（正常）の検査方法として正しいのはどれか。",
+    note: "腹臥位で骨盤・下肢を固定して実施する。",
+    choices: [
+      "両腕を体側に添えて、体幹を持ち上げる",
+      "両腕を体側に広げて、体幹を持ち上げる",
+      "両手を頭の後ろに組み、体幹を持ち上げる",
+      "体幹を伸展しようとするが可視的な動きはない"
+    ],
+    answer: 2,
+    exp: "Grade 5/4：腹臥位で両手を頭の後ろに組み、体幹を伸展させる（最大負荷）。Grade 3は両腕を横に広げる。Grade 2は両腕を体側に添えた状態で行う。Grade 1は収縮のみ。"
+  },
+  {
+    q: "体幹屈曲に主に関与する筋として正しいのはどれか。",
+    note: null,
+    choices: [
+      "脊柱起立筋",
+      "腸腰筋",
+      "腹直筋",
+      "腰方形筋"
+    ],
+    answer: 2,
+    exp: "体幹屈曲の主動筋は腹直筋（外腹斜筋・内腹斜筋も補助）。脊柱起立筋は体幹伸展、腸腰筋は股関節屈曲、腰方形筋は体幹側屈・腰椎伸展に作用する。"
+  }
+];
+
+// ── 状態 ─────────────────────────────────────
+let currentQ    = 0;
+let score       = 0;
+let answered    = [];
+let studentName = "";
+
+// ── 初期化 ────────────────────────────────────
+window.addEventListener("DOMContentLoaded", () => {
+  const done = localStorage.getItem(QUIZ_KEY);
+  if (done) {
+    const d = JSON.parse(done);
+    document.getElementById("name-screen").style.display = "none";
+    document.getElementById("done-screen").style.display = "block";
+    document.getElementById("done-msg").textContent =
+      `${d.name} さんはすでに回答済みです（${d.score}/10点）。\n担当の先生にお知らせください。`;
+  }
+  document.getElementById("student-name").addEventListener("input", validateName);
+});
+
+function validateName() {
+  const v = document.getElementById("student-name").value.trim();
+  const warn = document.getElementById("name-warn");
+  if (v.length > 0 && v.length < 3) {
+    warn.textContent = "フルネームで入力してください";
+  } else {
+    warn.textContent = "";
+  }
+}
+
+function startQuiz() {
+  const v = document.getElementById("student-name").value.trim();
+  const warn = document.getElementById("name-warn");
+  if (!v) { warn.textContent = "氏名を入力してください"; return; }
+  if (v.length < 3) { warn.textContent = "フルネームで入力してください"; return; }
+  studentName = v;
+  document.getElementById("name-screen").style.display = "none";
+  document.getElementById("quiz-screen").style.display = "block";
+  showQuestion();
+}
+
+// ── 問題表示 ──────────────────────────────────
+function showQuestion() {
+  const q = questions[currentQ];
+  document.getElementById("q-tag").textContent = `Q${currentQ + 1}`;
+  document.getElementById("q-text").textContent = q.q;
+  document.getElementById("progress-label").textContent = `問題 ${currentQ + 1} / ${questions.length}`;
+  document.getElementById("progress-fill").style.width = `${(currentQ / questions.length) * 100}%`;
+
+  const noteEl = document.getElementById("q-note");
+  if (q.note) {
+    noteEl.textContent = "💡 " + q.note;
+    noteEl.style.display = "block";
+  } else {
+    noteEl.style.display = "none";
+  }
+
+  const choicesEl = document.getElementById("choices");
+  choicesEl.innerHTML = "";
+  q.choices.forEach((c, i) => {
+    const btn = document.createElement("button");
+    btn.className = "choice-btn";
+    btn.innerHTML = c.replace(/\n/g, "<br>");
+    btn.onclick = () => selectAnswer(i, btn);
+    choicesEl.appendChild(btn);
+  });
+
+  document.getElementById("explanation").className = "explanation";
+  document.getElementById("explanation").innerHTML = "";
+  const nextBtn = document.getElementById("next-btn");
+  nextBtn.className = "next-btn";
+  nextBtn.textContent = currentQ < questions.length - 1 ? "次の問題 →" : "結果を見る";
+}
+
+function selectAnswer(idx, btn) {
+  const q = questions[currentQ];
+  const btns = document.querySelectorAll(".choice-btn");
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = idx === q.answer;
+  if (isCorrect) {
+    btn.classList.add("correct");
+    score++;
+    answered.push({ q: currentQ + 1, correct: true });
+  } else {
+    btn.classList.add("wrong");
+    btns[q.answer].classList.add("reveal");
+    answered.push({ q: currentQ + 1, correct: false, myAns: q.choices[idx], correctAns: q.choices[q.answer] });
+  }
+
+  const expEl = document.getElementById("explanation");
+  expEl.innerHTML = `<div class="exp-head">${isCorrect ? "✅ 正解！" : "❌ 不正解"}</div>${q.exp}`;
+  expEl.className = "explanation show " + (isCorrect ? "correct-exp" : "wrong-exp");
+
+  document.getElementById("next-btn").classList.add("show");
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+// ── 結果 ──────────────────────────────────────
+function showResult() {
+  document.getElementById("quiz-screen").style.display = "none";
+  const el = document.getElementById("result-screen");
+  el.style.display = "block";
+
+  const pct = score / questions.length;
+  let grade, gradeColor, msg;
+  if (pct >= 0.9) { grade = "S"; gradeColor = "#1a4a5c"; msg = "完璧です！国試本番でも自信を持って！"; }
+  else if (pct >= 0.7) { grade = "A"; gradeColor = "#2e6b80"; msg = "よくできました。苦手な箇所を復習しましょう。"; }
+  else if (pct >= 0.5) { grade = "B"; gradeColor = "#c08030"; msg = "もう少しです。解説をよく読んで再確認を。"; }
+  else { grade = "C"; gradeColor = "#c0543a"; msg = "基礎からしっかり復習しましょう。教科書で確認！"; }
+
+  const wrongList = answered.filter(a => !a.correct);
+
+  el.innerHTML = `
+    <p style="color:#718096;font-size:13px;margin-bottom:4px;">${studentName} さんの結果</p>
+    <div class="result-score">${score}</div>
+    <div class="result-denom">/ ${questions.length} 点</div>
+    <div class="result-grade" style="color:${gradeColor};">Grade ${grade}</div>
+    <p class="result-msg">${msg}</p>
+    <div class="result-bar-wrap"><div class="result-bar" id="result-bar" style="width:0%"></div></div>
+    ${wrongList.length > 0 ? `
+    <ul class="review-list">
+      <li style="font-weight:700;margin-bottom:6px;">📝 間違えた問題</li>
+      ${wrongList.map(a =>
+        `<li class="ng">Q${a.q}：あなたの答え「${a.myAns.replace(/\n.*/,'')}」→ 正解「${a.correctAns.replace(/\n.*/,'')}」</li>`
+      ).join('')}
+    </ul>` : `<p style="color:#276749;font-size:13px;background:#f0fff4;padding:10px 14px;border-radius:8px;margin-bottom:8px;">🎉 全問正解！素晴らしい！</p>`}
+    <p class="done-note">この画面を先生に見せてください。<br>回答内容はシステムに送信されました。</p>
+  `;
+
+  setTimeout(() => {
+    const bar = document.getElementById("result-bar");
+    if (bar) bar.style.width = `${pct * 100}%`;
+  }, 100);
+
+  // localStorage
+  localStorage.setItem(QUIZ_KEY, JSON.stringify({ name: studentName, score, date: new Date().toLocaleString("ja-JP") }));
+
+  // GAS送信
+  submitToGAS();
+}
+
+function submitToGAS() {
+  if (!GAS_URL || GAS_URL === "YOUR_GAS_URL_HERE") return;
+  const wrongNums = answered.filter(a => !a.correct).map(a => `Q${a.q}`).join(", ") || "なし";
+  const params = new URLSearchParams({
+    sheet: document.title,
+    name: studentName,
+    score: score,
+    total: questions.length,
+    wrong: wrongNums,
+    date: new Date().toLocaleString("ja-JP")
+  });
+  fetch(`${GAS_URL}?${params}`).catch(() => {});
+}
+
+// ── 教員メニュー ──────────────────────────────
+function openTeacher() {
+  document.getElementById("teacher-modal").classList.add("open");
+  document.getElementById("t-pass").value = "";
+  document.getElementById("t-warn").textContent = "";
+  document.getElementById("teacher-panel").style.display = "none";
+}
+function closeTeacher() {
+  document.getElementById("teacher-modal").classList.remove("open");
+}
+function checkPass() {
+  if (document.getElementById("t-pass").value === TEACHER_PW) {
+    document.getElementById("teacher-panel").style.display = "block";
+    document.getElementById("t-warn").textContent = "";
+    refreshStat();
+  } else {
+    document.getElementById("t-warn").textContent = "パスワードが違います";
+  }
+}
+function refreshStat() {
+  if (!GAS_URL || GAS_URL === "YOUR_GAS_URL_HERE") {
+    document.getElementById("t-stat").innerHTML = "⚠️ GAS URLが設定されていません。<br>HTMLファイル内の <code>GAS_URL</code> を設定してください。";
+    return;
+  }
+  document.getElementById("t-stat").textContent = "読み込み中…";
+  fetch(`${GAS_URL}?action=count&sheet=${encodeURIComponent(document.title)}`)
+    .then(r => r.json())
+    .then(d => {
+      document.getElementById("t-stat").innerHTML =
+        `📊 回答者数：<strong>${d.count}</strong> 名<br>` +
+        `📅 最終回答：${d.last || "なし"}<br>` +
+        `📝 シート：${document.title}`;
+    })
+    .catch(() => {
+      document.getElementById("t-stat").textContent = "取得に失敗しました。GAS URLを確認してください。";
+    });
+}
+function downloadCSV() {
+  if (!GAS_URL || GAS_URL === "YOUR_GAS_URL_HERE") { alert("GAS URLを設定してください。"); return; }
+  window.open(`${GAS_URL}?action=csv&sheet=${encodeURIComponent(document.title)}`, "_blank");
+}
+</script>
+</body>
+</html>

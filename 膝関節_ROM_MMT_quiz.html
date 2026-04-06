@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>股関節 ROM・MMT 確認テスト</title>
+<title>膝関節 ROM・MMT 確認テスト</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -112,7 +112,7 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 <div class="wrap">
 
 <div class="hdr">
-  <h1>股関節 ROM・MMT 確認テスト</h1>
+  <h1>膝関節 ROM・MMT 確認テスト</h1>
   <p>ROM 5問 ＋ MMT 5問｜全10問　（<span id="ans-count">0</span>/10問 回答済み）</p>
   <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">⋮</button>
   <div class="menu-drop" id="menuDrop">
@@ -144,29 +144,29 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
   </div>
 </div>
 
-<div class="sec-lbl">📐 ROM（関節可動域測定）股関節</div>
+<div class="sec-lbl">📐 ROM（関節可動域測定）膝関節</div>
 
 <!-- Q1 -->
 <div class="q">
   <div class="q-problem">
     <div class="qhead"><span class="qno" id="qn1">問1</span></div>
-    <div class="qtxt">股関節の参考可動域として<em>正しい</em>組み合わせはどれか。</div>
+    <div class="qtxt">膝関節の参考可動域として<em>正しい</em>組み合わせはどれか。</div>
   </div>
   <div class="q-answer"><div class="opts" id="o1">
-    <div class="opt" data-q="1" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">屈曲：90°　　伸展：30°</span></div>
-    <div class="opt" data-q="1" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">外転：45°　　内転：45°</span></div>
-    <div class="opt" data-q="1" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">屈曲：125°　　伸展：15°</span></div>
-    <div class="opt" data-q="1" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">外旋：60°　　内旋：45°</span></div>
-    <div class="opt" data-q="1" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">外転：60°　　内転：20°</span></div>
+    <div class="opt" data-q="1" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">屈曲：145°　　伸展：0°</span></div>
+    <div class="opt" data-q="1" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">屈曲：130°　　伸展：5°</span></div>
+    <div class="opt" data-q="1" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">屈曲：130°　　伸展：0°</span></div>
+    <div class="opt" data-q="1" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">屈曲：120°　　伸展：0°</span></div>
+    <div class="opt" data-q="1" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">屈曲：145°　　伸展：5°</span></div>
   </div>
   <div class="exp" id="x1">
-    <div class="exp-h">✅ 正解：③ 屈曲：125°　伸展：15°</div>
+    <div class="exp-h">✅ 正解：③ 屈曲：130°　伸展：0°</div>
     <div class="exp-b">
-      <span class="g">③ 股関節屈曲は<b>125°</b>（膝屈曲位）、伸展は<b>15°</b>。</span><br>
-      <span class="r">① 屈曲90°は誤り（125°が正しい）。伸展30°も誤り（15°が正しい）</span><br>
-      <span class="r">② 内転は<b>20°</b>（45°は外転の値）</span><br>
-      <span class="r">④ 外旋は<b>45°</b>（60°は誤り）</span><br>
-      <span class="r">⑤ 外転は<b>45°</b>（60°は誤り）</span>
+      <span class="g">③ 膝関節屈曲は<b>130°</b>、伸展は<b>0°</b>。肘関節屈曲145°と混同しないよう注意。</span><br>
+      <span class="r">① 屈曲145°は<b>肘関節</b>の屈曲値（膝関節は130°）</span><br>
+      <span class="r">② 伸展5°は誤り（0°が正しい）。5°は肘関節伸展の値</span><br>
+      <span class="r">④ 屈曲120°は誤り（130°が正しい）</span><br>
+      <span class="r">⑤ 屈曲145°・伸展5°はともに誤り</span>
     </div>
   </div></div>
 </div>
@@ -175,23 +175,23 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 <div class="q">
   <div class="q-problem">
     <div class="qhead"><span class="qno" id="qn2">問2</span></div>
-    <div class="qtxt">股関節<em>屈曲・伸展</em>の基本軸と移動軸の組み合わせで<em>正しい</em>のはどれか。</div>
+    <div class="qtxt">膝関節<em>屈曲・伸展</em>の基本軸と移動軸の組み合わせで<em>正しい</em>のはどれか。</div>
   </div>
   <div class="q-answer"><div class="opts" id="o2">
-    <div class="opt" data-q="2" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">基本軸：両側の上前腸骨棘を結ぶ線への垂直線<br>移動軸：大腿中央線</span></div>
-    <div class="opt" data-q="2" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">基本軸：膝蓋骨より下ろした垂直線<br>移動軸：下腿中央線</span></div>
-    <div class="opt" data-q="2" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">基本軸：体幹と平行な線<br>移動軸：大腿骨（大転子と大腿骨外側上顆を結ぶ線）</span></div>
-    <div class="opt" data-q="2" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">基本軸：仙骨後面<br>移動軸：第1胸椎棘突起と第5腰椎棘突起を結ぶ線</span></div>
-    <div class="opt" data-q="2" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">基本軸：大腿骨<br>移動軸：下腿中央線</span></div>
+    <div class="opt" data-q="2" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">基本軸：腓骨<br>移動軸：大腿骨</span></div>
+    <div class="opt" data-q="2" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">基本軸：大腿骨<br>移動軸：腓骨（腓骨頭と外果を結ぶ線）</span></div>
+    <div class="opt" data-q="2" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">基本軸：体幹と平行な線<br>移動軸：大腿骨</span></div>
+    <div class="opt" data-q="2" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">基本軸：上腕骨<br>移動軸：橈骨</span></div>
+    <div class="opt" data-q="2" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">基本軸：脛骨<br>移動軸：大腿骨</span></div>
   </div>
   <div class="exp" id="x2">
-    <div class="exp-h">✅ 正解：③ 基本軸：体幹と平行な線　移動軸：大腿骨</div>
+    <div class="exp-h">✅ 正解：② 基本軸：大腿骨　移動軸：腓骨（腓骨頭と外果を結ぶ線）</div>
     <div class="exp-b">
-      <span class="g">③ 股関節屈曲・伸展の基本軸は<b>体幹と平行な線</b>、移動軸は<b>大腿骨</b>（大転子と大腿骨外側上顆を結ぶ線）。</span><br>
-      <span class="r">① 基本軸「上前腸骨棘を結ぶ線への垂直線」・移動軸「大腿中央線」→<b>股関節外転・内転</b>の組み合わせ</span><br>
-      <span class="r">② 基本軸「膝蓋骨より下ろした垂直線」・移動軸「下腿中央線」→<b>股関節外旋・内旋</b>の組み合わせ</span><br>
-      <span class="r">④ 基本軸「仙骨後面」→<b>体幹屈曲・伸展</b>の基本軸</span><br>
-      <span class="r">⑤ 基本軸「大腿骨」は移動軸の役割（基本軸と移動軸が逆）</span>
+      <span class="g">② 膝関節屈曲・伸展の基本軸は<b>大腿骨</b>、移動軸は<b>腓骨</b>（腓骨頭と外果を結ぶ線）。</span><br>
+      <span class="r">① 基本軸と移動軸が逆（基本軸＝固定側の大腿骨、移動軸＝動く側の腓骨）</span><br>
+      <span class="r">③ 体幹と平行な線 →<b>股関節屈曲・伸展</b>の基本軸</span><br>
+      <span class="r">④ 上腕骨・橈骨 →<b>肘関節屈曲・伸展</b>の組み合わせ</span><br>
+      <span class="r">⑤ 大腿骨の軸・下腿中央線 →<b>膝関節内旋・外旋</b>の組み合わせ</span>
     </div>
   </div></div>
 </div>
@@ -200,23 +200,23 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 <div class="q">
   <div class="q-problem">
     <div class="qhead"><span class="qno" id="qn3">問3</span></div>
-    <div class="qtxt">股関節<em>外転・内転</em>の基本軸と移動軸の組み合わせで<em>正しい</em>のはどれか。</div>
+    <div class="qtxt">膝関節<em>内旋・外旋</em>の参考可動域と測定肢位について<em>正しい</em>のはどれか。</div>
   </div>
   <div class="q-answer"><div class="opts" id="o3">
-    <div class="opt" data-q="3" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">基本軸：体幹と平行な線<br>移動軸：大腿骨</span></div>
-    <div class="opt" data-q="3" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">基本軸：膝蓋骨より下ろした垂直線<br>移動軸：下腿中央線</span></div>
-    <div class="opt" data-q="3" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">基本軸：両側の上前腸骨棘を結ぶ線への垂直線<br>移動軸：大腿中央線</span></div>
-    <div class="opt" data-q="3" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">基本軸：両側の上前腸骨棘を結ぶ線<br>移動軸：大腿骨</span></div>
-    <div class="opt" data-q="3" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">基本軸：仙骨後面<br>移動軸：大腿中央線</span></div>
+    <div class="opt" data-q="3" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">内旋：20°　外旋：10°<br>測定肢位：膝関節90°屈曲位</span></div>
+    <div class="opt" data-q="3" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">内旋：10°　外旋：20°<br>測定肢位：膝関節伸展位（背臥位）</span></div>
+    <div class="opt" data-q="3" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">内旋：10°　外旋：20°<br>測定肢位：膝関節90°屈曲位</span></div>
+    <div class="opt" data-q="3" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">内旋：20°　外旋：20°<br>測定肢位：膝関節90°屈曲位</span></div>
+    <div class="opt" data-q="3" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">内旋：10°　外旋：10°<br>測定肢位：股関節・膝関節90°屈曲位</span></div>
   </div>
   <div class="exp" id="x3">
-    <div class="exp-h">✅ 正解：③ 基本軸：両側の上前腸骨棘を結ぶ線への垂直線　移動軸：大腿中央線</div>
+    <div class="exp-h">✅ 正解：③ 内旋：10°　外旋：20°　測定肢位：膝関節90°屈曲位</div>
     <div class="exp-b">
-      <span class="g">③ 股関節外転・内転の基本軸は<b>両側の上前腸骨棘を結ぶ線への垂直線</b>、移動軸は<b>大腿中央線</b>（膝蓋骨中心線）。</span><br>
-      <span class="r">① 体幹と平行な線・大腿骨 →<b>股関節屈曲・伸展</b>の組み合わせ</span><br>
-      <span class="r">② 膝蓋骨より下ろした垂直線・下腿中央線 →<b>股関節外旋・内旋</b>の組み合わせ</span><br>
-      <span class="r">④ 「両側の上前腸骨棘を結ぶ線」（垂直線ではない）は誤り。移動軸も誤り</span><br>
-      <span class="r">⑤ 仙骨後面 →<b>体幹屈曲・伸展</b>の基本軸</span>
+      <span class="g">③ 膝関節内旋は<b>10°</b>、外旋は<b>20°</b>。測定肢位は<b>膝関節90°屈曲位</b>（座位または腹臥位）。基本軸＝大腿骨の軸、移動軸＝下腿中央線。</span><br>
+      <span class="r">① 内旋と外旋の値が逆（内旋10°・外旋20°が正しい）</span><br>
+      <span class="r">② 測定肢位が誤り（膝関節伸展位では内旋・外旋を正確に測定できない）</span><br>
+      <span class="r">④ 内旋20°は誤り（10°が正しい）</span><br>
+      <span class="r">⑤ 外旋10°は誤り（20°が正しい）。股関節90°屈曲位は不要</span>
     </div>
   </div></div>
 </div>
@@ -225,23 +225,23 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 <div class="q">
   <div class="q-problem">
     <div class="qhead"><span class="qno" id="qn4">問4</span></div>
-    <div class="qtxt">股関節<em>外旋・内旋</em>のROM測定について<em>正しい</em>のはどれか。</div>
+    <div class="qtxt">膝関節屈曲のROM測定における測定肢位の注意点として<em>正しい</em>のはどれか。</div>
   </div>
   <div class="q-answer"><div class="opts" id="o4">
-    <div class="opt" data-q="4" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">測定肢位は股関節・膝関節伸展位（背臥位）で行う</span></div>
-    <div class="opt" data-q="4" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">基本軸は体幹と平行な線、移動軸は大腿骨である</span></div>
-    <div class="opt" data-q="4" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">外旋：45°　内旋：45°で、外旋と内旋は同じ可動域である</span></div>
-    <div class="opt" data-q="4" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">基本軸は膝蓋骨より下ろした垂直線、移動軸は大腿中央線である</span></div>
-    <div class="opt" data-q="4" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">外旋：60°　内旋：45°で、外旋の方が大きい</span></div>
+    <div class="opt" data-q="4" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">股関節を伸展位にして測定する</span></div>
+    <div class="opt" data-q="4" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">腹臥位で股関節を屈曲させた肢位で測定する</span></div>
+    <div class="opt" data-q="4" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">腹臥位（股関節中間位）で膝を屈曲させ測定する</span></div>
+    <div class="opt" data-q="4" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">座位で足底を床につけた状態で測定する</span></div>
+    <div class="opt" data-q="4" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">背臥位で股関節を90°屈曲させた肢位で測定する</span></div>
   </div>
   <div class="exp" id="x4">
-    <div class="exp-h">✅ 正解：③ 外旋：45°　内旋：45°で同じ可動域</div>
+    <div class="exp-h">✅ 正解：⑤ 背臥位で股関節を90°屈曲させた肢位で測定する</div>
     <div class="exp-b">
-      <span class="g">③ 股関節外旋・内旋はともに<b>45°</b>で同じ値。測定肢位は股関節・膝関節90°屈曲位（座位）。基本軸＝<b>膝蓋骨より下ろした垂直線</b>、移動軸＝<b>下腿中央線</b>。</span><br>
-      <span class="r">① 測定肢位は<b>股関節・膝関節90°屈曲位（座位）</b>（伸展位は誤り）</span><br>
-      <span class="r">② 体幹と平行な線・大腿骨 →<b>股関節屈曲・伸展</b>の組み合わせ</span><br>
-      <span class="r">④ 移動軸は大腿中央線ではなく<b>下腿中央線</b></span><br>
-      <span class="r">⑤ 外旋60°は誤り（45°が正しい）</span>
+      <span class="g">⑤ 膝関節屈曲の測定は<b>背臥位で股関節を屈曲位</b>にして行う（2022年改訂基準）。腓骨頭と外果を結ぶ線（移動軸）を角度計に合わせて測定する。</span><br>
+      <span class="r">① 股関節伸展位は誤り（股関節を屈曲位にするのが正しい）</span><br>
+      <span class="r">② 腹臥位で股関節を屈曲させる →大腿直筋が短縮し膝屈曲が制限されるため不適切</span><br>
+      <span class="r">③ 腹臥位・股関節中間位 → 旧来の方法であり、2022年改訂基準では背臥位・股関節屈曲位が採用</span><br>
+      <span class="r">④ 座位・足底を床につけた状態 →標準の測定肢位ではない</span>
     </div>
   </div></div>
 </div>
@@ -250,50 +250,50 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 <div class="q">
   <div class="q-problem">
     <div class="qhead"><span class="qno" id="qn5">問5</span></div>
-    <div class="qtxt">股関節の参考可動域の組み合わせで<em>正しい</em>のはどれか。</div>
+    <div class="qtxt">膝関節の参考可動域として<em>正しい</em>のはどれか。</div>
   </div>
   <div class="q-answer"><div class="opts" id="o5">
-    <div class="opt" data-q="5" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">外転：45°　　内転：45°</span></div>
-    <div class="opt" data-q="5" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">屈曲：125°　　外転：45°　　内転：20°</span></div>
-    <div class="opt" data-q="5" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">屈曲：125°　　伸展：30°</span></div>
-    <div class="opt" data-q="5" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">外旋：45°　　内旋：30°</span></div>
-    <div class="opt" data-q="5" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">屈曲：90°　　伸展：15°　　外転：45°</span></div>
+    <div class="opt" data-q="5" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">屈曲：120°　　伸展：0°</span></div>
+    <div class="opt" data-q="5" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">屈曲：130°　　伸展：0°</span></div>
+    <div class="opt" data-q="5" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">屈曲：140°　　伸展：0°</span></div>
+    <div class="opt" data-q="5" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">屈曲：130°　　伸展：10°</span></div>
+    <div class="opt" data-q="5" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">屈曲：100°　　伸展：0°</span></div>
   </div>
   <div class="exp" id="x5">
-    <div class="exp-h">✅ 正解：② 屈曲：125°　外転：45°　内転：20°</div>
+    <div class="exp-h">✅ 正解：② 屈曲130°　伸展0°</div>
     <div class="exp-b">
-      <span class="g">② 屈曲<b>125°</b>・外転<b>45°</b>・内転<b>20°</b>はすべて正しい組み合わせ。</span><br>
-      <span class="r">① 内転は<b>20°</b>（45°は誤り。45°は外転の値）</span><br>
-      <span class="r">③ 伸展は<b>15°</b>（30°は誤り）</span><br>
-      <span class="r">④ 内旋は<b>45°</b>（30°は誤り。外旋・内旋はともに45°）</span><br>
-      <span class="r">⑤ 屈曲は<b>125°</b>（90°は誤り）</span>
+      <span class="g">② 膝関節屈曲の参考可動域は<b>130°</b>、伸展は<b>0°</b>（2022年改訂基準）。</span><br>
+      <span class="r">① 屈曲120°は誤り（130°が正しい）</span><br>
+      <span class="r">③ 屈曲140°は誤り（130°が正しい）</span><br>
+      <span class="r">④ 伸展10°は誤り（0°が正しい。10°は股関節伸展の値）</span><br>
+      <span class="r">⑤ 屈曲100°は誤り（130°が正しい）</span>
     </div>
   </div></div>
 </div>
 
-<div class="sec-lbl">💪 MMT（徒手筋力テスト）主動作筋</div>
+<div class="sec-lbl">💪 MMT（徒手筋力テスト）主動作筋・検査肢位</div>
 
 <!-- Q6 -->
 <div class="q">
   <div class="q-problem">
     <div class="qhead"><span class="qno" id="qn6">問6</span></div>
-    <div class="qtxt">Danielsらの徒手筋力テストで<em>股関節屈曲</em>の主動作筋はどれか。</div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>膝関節屈曲</em>の主動作筋はどれか。</div>
   </div>
   <div class="q-answer"><div class="opts" id="o6">
-    <div class="opt" data-q="6" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">大殿筋・ハムストリングス</span></div>
-    <div class="opt" data-q="6" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">中殿筋・小殿筋</span></div>
-    <div class="opt" data-q="6" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">腸腰筋・大腿直筋</span></div>
-    <div class="opt" data-q="6" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">大内転筋・長内転筋・短内転筋</span></div>
-    <div class="opt" data-q="6" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">梨状筋・外閉鎖筋・内閉鎖筋</span></div>
+    <div class="opt" data-q="6" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">大腿四頭筋（大腿直筋・外側広筋・内側広筋・中間広筋）</span></div>
+    <div class="opt" data-q="6" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">腸腰筋・縫工筋</span></div>
+    <div class="opt" data-q="6" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">ハムストリングス（大腿二頭筋・半腱様筋・半膜様筋）</span></div>
+    <div class="opt" data-q="6" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">大殿筋・中殿筋</span></div>
+    <div class="opt" data-q="6" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">腓腹筋・ヒラメ筋</span></div>
   </div>
   <div class="exp" id="x6">
-    <div class="exp-h">✅ 正解：③ 腸腰筋・大腿直筋</div>
+    <div class="exp-h">✅ 正解：③ ハムストリングス（大腿二頭筋・半腱様筋・半膜様筋）</div>
     <div class="exp-b">
-      <span class="g">③ 股関節屈曲の主動作筋は<b>腸腰筋</b>（腸骨筋・大腰筋：大腿神経 L1〜3）と<b>大腿直筋</b>（大腿神経 L2〜4）。</span><br>
-      <span class="r">① 大殿筋・ハムストリングス →<b>股関節伸展</b>の主動作筋</span><br>
-      <span class="r">② 中殿筋・小殿筋 →<b>股関節外転</b>の主動作筋</span><br>
-      <span class="r">④ 大内転筋・長内転筋・短内転筋 →<b>股関節内転</b>の主動作筋</span><br>
-      <span class="r">⑤ 梨状筋・外閉鎖筋・内閉鎖筋 →<b>股関節外旋</b>の主動作筋</span>
+      <span class="g">③ 膝関節屈曲の主動作筋は<b>ハムストリングス</b>（大腿二頭筋：坐骨神経 L5〜S2 / 半腱様筋・半膜様筋：坐骨神経 L5〜S1）。</span><br>
+      <span class="r">① 大腿四頭筋 →<b>膝関節伸展</b>の主動作筋（屈曲と対立）</span><br>
+      <span class="r">② 腸腰筋・縫工筋 →<b>股関節屈曲</b>に関与（膝関節屈曲の主動作筋ではない）</span><br>
+      <span class="r">④ 大殿筋・中殿筋 →<b>股関節伸展・外転</b>の主動作筋</span><br>
+      <span class="r">⑤ 腓腹筋 → 膝関節屈曲に補助的に関与するが主動作筋ではない。ヒラメ筋は関与しない</span>
     </div>
   </div></div>
 </div>
@@ -302,23 +302,23 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 <div class="q">
   <div class="q-problem">
     <div class="qhead"><span class="qno" id="qn7">問7</span></div>
-    <div class="qtxt">Danielsらの徒手筋力テストで<em>股関節伸展</em>の主動作筋はどれか。</div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>膝関節伸展</em>の主動作筋はどれか。</div>
   </div>
   <div class="q-answer"><div class="opts" id="o7">
-    <div class="opt" data-q="7" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">腸腰筋・大腿直筋</span></div>
-    <div class="opt" data-q="7" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">大殿筋・ハムストリングス</span></div>
-    <div class="opt" data-q="7" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">中殿筋・小殿筋</span></div>
-    <div class="opt" data-q="7" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">大内転筋・長内転筋・短内転筋</span></div>
-    <div class="opt" data-q="7" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">梨状筋・外閉鎖筋・内閉鎖筋</span></div>
+    <div class="opt" data-q="7" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">ハムストリングス（大腿二頭筋・半腱様筋・半膜様筋）</span></div>
+    <div class="opt" data-q="7" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">腸腰筋・縫工筋</span></div>
+    <div class="opt" data-q="7" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">大殿筋・中殿筋</span></div>
+    <div class="opt" data-q="7" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">大腿四頭筋（大腿直筋・外側広筋・内側広筋・中間広筋）</span></div>
+    <div class="opt" data-q="7" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">腓腹筋・ヒラメ筋</span></div>
   </div>
   <div class="exp" id="x7">
-    <div class="exp-h">✅ 正解：② 大殿筋・ハムストリングス</div>
+    <div class="exp-h">✅ 正解：④ 大腿四頭筋（大腿直筋・外側広筋・内側広筋・中間広筋）</div>
     <div class="exp-b">
-      <span class="g">② 股関節伸展の主動作筋は<b>大殿筋</b>（下殿神経 L5〜S2）と<b>ハムストリングス</b>（大腿二頭筋・半腱様筋・半膜様筋：坐骨神経 L5〜S2）。</span><br>
-      <span class="r">① 腸腰筋・大腿直筋 →<b>股関節屈曲</b>の主動作筋（伸展と対立）</span><br>
-      <span class="r">③ 中殿筋・小殿筋 →<b>股関節外転</b>の主動作筋</span><br>
-      <span class="r">④ 大内転筋・長内転筋・短内転筋 →<b>股関節内転</b>の主動作筋</span><br>
-      <span class="r">⑤ 梨状筋・外閉鎖筋・内閉鎖筋 →<b>股関節外旋</b>の主動作筋</span>
+      <span class="g">④ 膝関節伸展の主動作筋は<b>大腿四頭筋</b>（大腿神経 L2〜4）。4つの筋全てが膝蓋腱を介して脛骨粗面に付着する。</span><br>
+      <span class="r">① ハムストリングス →<b>膝関節屈曲</b>の主動作筋（伸展と対立）</span><br>
+      <span class="r">② 腸腰筋・縫工筋 →<b>股関節屈曲</b>に関与</span><br>
+      <span class="r">③ 大殿筋・中殿筋 →<b>股関節伸展・外転</b>の主動作筋</span><br>
+      <span class="r">⑤ 腓腹筋・ヒラメ筋 →<b>足関節底屈</b>の主動作筋</span>
     </div>
   </div></div>
 </div>
@@ -327,23 +327,23 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 <div class="q">
   <div class="q-problem">
     <div class="qhead"><span class="qno" id="qn8">問8</span></div>
-    <div class="qtxt">Danielsらの徒手筋力テストで<em>股関節外転</em>の主動作筋はどれか。</div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>膝関節屈曲</em>の主動作筋はどれか。</div>
   </div>
   <div class="q-answer"><div class="opts" id="o8">
-    <div class="opt" data-q="8" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">大殿筋・ハムストリングス</span></div>
-    <div class="opt" data-q="8" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">腸腰筋・大腿直筋</span></div>
-    <div class="opt" data-q="8" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">中殿筋・小殿筋</span></div>
-    <div class="opt" data-q="8" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">大内転筋・長内転筋・短内転筋</span></div>
-    <div class="opt" data-q="8" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">大腿筋膜張筋・縫工筋</span></div>
+    <div class="opt" data-q="8" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">大腿四頭筋（大腿直筋・外側広筋・内側広筋・中間広筋）</span></div>
+    <div class="opt" data-q="8" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">ハムストリングス（大腿二頭筋・半腱様筋・半膜様筋）</span></div>
+    <div class="opt" data-q="8" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">前脛骨筋・長趾伸筋</span></div>
+    <div class="opt" data-q="8" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">腸腰筋（腸骨筋・大腰筋）</span></div>
+    <div class="opt" data-q="8" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">下腿三頭筋（腓腹筋・ヒラメ筋）</span></div>
   </div>
   <div class="exp" id="x8">
-    <div class="exp-h">✅ 正解：③ 中殿筋・小殿筋</div>
+    <div class="exp-h">✅ 正解：② ハムストリングス（大腿二頭筋・半腱様筋・半膜様筋）</div>
     <div class="exp-b">
-      <span class="g">③ 股関節外転の主動作筋は<b>中殿筋</b>（上殿神経 L4〜S1）と<b>小殿筋</b>（上殿神経 L4〜S1）。</span><br>
-      <span class="r">① 大殿筋・ハムストリングス →<b>股関節伸展</b>の主動作筋</span><br>
-      <span class="r">② 腸腰筋・大腿直筋 →<b>股関節屈曲</b>の主動作筋</span><br>
-      <span class="r">④ 大内転筋・長内転筋・短内転筋 →<b>股関節内転</b>の主動作筋（外転と対立）</span><br>
-      <span class="r">⑤ 大腿筋膜張筋・縫工筋 → 外転に補助的に関与するが主動作筋ではない</span>
+      <span class="g">② 膝関節屈曲の主動作筋は<b>ハムストリングス</b>（大腿二頭筋・半腱様筋・半膜様筋）。坐骨神経（L4〜S3）支配。</span><br>
+      <span class="r">① 大腿四頭筋 →<b>膝関節伸展</b>の主動作筋（屈曲と拮抗）</span><br>
+      <span class="r">③ 前脛骨筋・長趾伸筋 →<b>足関節背屈</b>の主動作筋</span><br>
+      <span class="r">④ 腸腰筋 →<b>股関節屈曲</b>の主動作筋</span><br>
+      <span class="r">⑤ 下腿三頭筋 →<b>足関節底屈</b>の主動作筋</span>
     </div>
   </div></div>
 </div>
@@ -352,23 +352,23 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 <div class="q">
   <div class="q-problem">
     <div class="qhead"><span class="qno" id="qn9">問9</span></div>
-    <div class="qtxt">Danielsらの徒手筋力テストで<em>股関節内転</em>の主動作筋はどれか。</div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>膝関節伸展</em>の主動作筋はどれか。</div>
   </div>
   <div class="q-answer"><div class="opts" id="o9">
-    <div class="opt" data-q="9" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">中殿筋・小殿筋</span></div>
-    <div class="opt" data-q="9" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">大殿筋・ハムストリングス</span></div>
-    <div class="opt" data-q="9" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">腸腰筋・大腿直筋</span></div>
-    <div class="opt" data-q="9" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">大内転筋・長内転筋・短内転筋</span></div>
-    <div class="opt" data-q="9" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">梨状筋・外閉鎖筋・内閉鎖筋</span></div>
+    <div class="opt" data-q="9" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">ハムストリングス（大腿二頭筋・半腱様筋・半膜様筋）</span></div>
+    <div class="opt" data-q="9" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">下腿三頭筋（腓腹筋・ヒラメ筋）</span></div>
+    <div class="opt" data-q="9" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">腸腰筋（腸骨筋・大腰筋）</span></div>
+    <div class="opt" data-q="9" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">大腿四頭筋（大腿直筋・外側広筋・内側広筋・中間広筋）</span></div>
+    <div class="opt" data-q="9" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">縫工筋・薄筋</span></div>
   </div>
   <div class="exp" id="x9">
-    <div class="exp-h">✅ 正解：④ 大内転筋・長内転筋・短内転筋</div>
+    <div class="exp-h">✅ 正解：④ 大腿四頭筋（大腿直筋・外側広筋・内側広筋・中間広筋）</div>
     <div class="exp-b">
-      <span class="g">④ 股関節内転の主動作筋は<b>大内転筋</b>（閉鎖神経・坐骨神経 L3〜S1）・<b>長内転筋</b>（閉鎖神経 L2〜4）・<b>短内転筋</b>（閉鎖神経 L2〜4）。</span><br>
-      <span class="r">① 中殿筋・小殿筋 →<b>股関節外転</b>の主動作筋（内転と対立）</span><br>
-      <span class="r">② 大殿筋・ハムストリングス →<b>股関節伸展</b>の主動作筋</span><br>
-      <span class="r">③ 腸腰筋・大腿直筋 →<b>股関節屈曲</b>の主動作筋</span><br>
-      <span class="r">⑤ 梨状筋・外閉鎖筋・内閉鎖筋 →<b>股関節外旋</b>の主動作筋</span>
+      <span class="g">④ 膝関節伸展の主動作筋は<b>大腿四頭筋</b>（大腿直筋・外側広筋・内側広筋・中間広筋）。大腿神経（L2〜4）支配。</span><br>
+      <span class="r">① ハムストリングス →<b>膝関節屈曲</b>の主動作筋（伸展と拮抗）</span><br>
+      <span class="r">② 下腿三頭筋 →<b>足関節底屈</b>の主動作筋</span><br>
+      <span class="r">③ 腸腰筋 →<b>股関節屈曲</b>の主動作筋</span><br>
+      <span class="r">⑤ 縫工筋・薄筋 → 膝屈曲の補助筋（主動作筋ではない）</span>
     </div>
   </div></div>
 </div>
@@ -377,23 +377,23 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 <div class="q">
   <div class="q-problem">
     <div class="qhead"><span class="qno" id="qn10">問10</span></div>
-    <div class="qtxt">Danielsらの徒手筋力テストで<em>股関節外旋</em>の主動作筋として正しいのはどれか。</div>
+    <div class="qtxt">大腿四頭筋を構成する筋の組み合わせとして<em>正しい</em>のはどれか。</div>
   </div>
   <div class="q-answer"><div class="opts" id="o10">
-    <div class="opt" data-q="10" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">小殿筋・中殿筋前部・大腿筋膜張筋</span></div>
-    <div class="opt" data-q="10" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">腸腰筋・大腿直筋</span></div>
-    <div class="opt" data-q="10" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">梨状筋・外閉鎖筋・内閉鎖筋・上下双子筋・大腿方形筋</span></div>
-    <div class="opt" data-q="10" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">大殿筋・ハムストリングス</span></div>
-    <div class="opt" data-q="10" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">中殿筋・小殿筋</span></div>
+    <div class="opt" data-q="10" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">大腿直筋・外側広筋・内側広筋・中間広筋</span></div>
+    <div class="opt" data-q="10" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">大腿直筋・大腿二頭筋・縫工筋・薄筋</span></div>
+    <div class="opt" data-q="10" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">半腱様筋・半膜様筋・大腿二頭筋・大腿直筋</span></div>
+    <div class="opt" data-q="10" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">外側広筋・内側広筋・腓腹筋・ヒラメ筋</span></div>
+    <div class="opt" data-q="10" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">大腿直筋・大腿筋膜張筋・縫工筋・外側広筋</span></div>
   </div>
   <div class="exp" id="x10">
-    <div class="exp-h">✅ 正解：③ 梨状筋・外閉鎖筋・内閉鎖筋・上下双子筋・大腿方形筋</div>
+    <div class="exp-h">✅ 正解：① 大腿直筋・外側広筋・内側広筋・中間広筋</div>
     <div class="exp-b">
-      <span class="g">③ 股関節外旋の主動作筋は深層外旋六筋：<b>梨状筋・外閉鎖筋・内閉鎖筋・上双子筋・下双子筋・大腿方形筋</b>（仙骨神経叢 L4〜S2）。</span><br>
-      <span class="r">① 小殿筋・中殿筋前部・大腿筋膜張筋 →<b>股関節内旋</b>の主動作筋</span><br>
-      <span class="r">② 腸腰筋・大腿直筋 →<b>股関節屈曲</b>の主動作筋</span><br>
-      <span class="r">④ 大殿筋・ハムストリングス →<b>股関節伸展</b>の主動作筋</span><br>
-      <span class="r">⑤ 中殿筋・小殿筋 →<b>股関節外転</b>の主動作筋</span>
+      <span class="g">① 大腿四頭筋は<b>大腿直筋・外側広筋・内側広筋・中間広筋</b>の4筋で構成される。いずれも大腿神経（L2〜4）支配。</span><br>
+      <span class="r">② 大腿二頭筋はハムストリングス（膝屈曲）、縫工筋・薄筋は大腿四頭筋に含まれない</span><br>
+      <span class="r">③ 半腱様筋・半膜様筋・大腿二頭筋はハムストリングスであり、大腿四頭筋ではない</span><br>
+      <span class="r">④ 腓腹筋・ヒラメ筋は下腿三頭筋（足関節底屈）であり大腿四頭筋に含まれない</span><br>
+      <span class="r">⑤ 大腿筋膜張筋・縫工筋は大腿四頭筋に含まれない</span>
     </div>
   </div></div>
 </div>
@@ -415,22 +415,22 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 </div>
 <script>
 const ans = {};
-const COR = {1:3, 2:3, 3:3, 4:3, 5:2, 6:3, 7:2, 8:3, 9:4, 10:3};
+const COR = {1:3, 2:2, 3:2, 4:5, 5:2, 6:3, 7:4, 8:2, 9:4, 10:1};
 const N = 10;
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzdGzlEK6wYWE1DMK8fN1yrOPKsj5yBq1F7VPhSvDFrUCFxsoj794QmLngVd7tJm9ksnQ/exec';
 const TEACHER_PW = '5948saya';
 
 const OL = {
-  1:  ['①屈曲90°伸展30°','②外転45°内転45°','③屈曲125°伸展15°','④外旋60°内旋45°','⑤外転60°内転20°'],
-  2:  ['①基本軸:上前腸骨棘垂直線/移動軸:大腿中央線','②基本軸:膝蓋骨垂直線/移動軸:下腿中央線','③基本軸:体幹と平行な線/移動軸:大腿骨','④基本軸:仙骨後面/移動軸:第1胸椎〜第5腰椎','⑤基本軸:大腿骨/移動軸:下腿中央線'],
-  3:  ['①体幹平行線/大腿骨','②膝蓋骨垂直線/下腿中央線','③上前腸骨棘垂直線/大腿中央線','④上前腸骨棘結ぶ線/大腿骨','⑤仙骨後面/大腿中央線'],
-  4:  ['①股膝伸展位背臥位','②体幹平行線/大腿骨','③外旋45°内旋45°同値','④膝蓋骨垂直線/大腿中央線','⑤外旋60°内旋45°'],
-  5:  ['①外転45°内転45°','②屈曲125°外転45°内転20°','③屈曲125°伸展30°','④外旋45°内旋30°','⑤屈曲90°伸展15°外転45°'],
-  6:  ['①大殿筋・ハムストリングス','②中殿筋・小殿筋','③腸腰筋・大腿直筋','④大内転筋・長内転筋・短内転筋','⑤梨状筋・外閉鎖筋・内閉鎖筋'],
-  7:  ['①腸腰筋・大腿直筋','②大殿筋・ハムストリングス','③中殿筋・小殿筋','④大内転筋・長内転筋・短内転筋','⑤梨状筋・外閉鎖筋・内閉鎖筋'],
-  8:  ['①大殿筋・ハムストリングス','②腸腰筋・大腿直筋','③中殿筋・小殿筋','④大内転筋・長内転筋・短内転筋','⑤大腿筋膜張筋・縫工筋'],
-  9:  ['①中殿筋・小殿筋','②大殿筋・ハムストリングス','③腸腰筋・大腿直筋','④大内転筋・長内転筋・短内転筋','⑤梨状筋・外閉鎖筋・内閉鎖筋'],
-  10: ['①小殿筋・中殿筋前部・大腿筋膜張筋','②腸腰筋・大腿直筋','③梨状筋・外閉鎖筋・内閉鎖筋・上下双子筋・大腿方形筋','④大殿筋・ハムストリングス','⑤中殿筋・小殿筋'],
+  1:  ['①屈145°伸0°','②屈130°伸5°','③屈130°伸0°','④屈120°伸0°','⑤屈145°伸5°'],
+  2:  ['①基本軸:腓骨/移動軸:大腿骨','②基本軸:大腿骨/移動軸:腓骨','③体幹平行線/大腿骨','④上腕骨/橈骨','⑤大腿骨軸/下腿中央線'],
+  3:  ['①腓骨/大腿骨','②大腿骨/腓骨（腓骨頭〜外果）','③大腿骨/脛骨（脛骨粗面〜内果）','④体幹平行線/大腿骨','⑤上腕骨/橈骨'],
+  4:  ['①股関節伸展位','②腹臥位股関節屈曲位','③腹臥位股関節中間位','④座位足底床付き','⑤背臥位股関節90°屈曲位'],
+  5:  ['①移動軸:脛骨','②屈130°伸0°外旋>内旋','③内旋外旋移動軸:大腿中央線','④基本軸:腓骨/移動軸:大腿骨','⑤屈130°伸5°'],
+  6:  ['①大腿四頭筋','②腸腰筋・縫工筋','③ハムストリングス','④大殿筋・中殿筋','⑤腓腹筋・ヒラメ筋'],
+  7:  ['①ハムストリングス','②腸腰筋・縫工筋','③大殿筋・中殿筋','④大腿四頭筋','⑤腓腹筋・ヒラメ筋'],
+  8:  ['①背臥位前面抵抗','②腹臥位前面抵抗','③腹臥位後面伸展方向抵抗','④座位後面屈曲方向抵抗','⑤側臥位下腿中央部抵抗'],
+  9:  ['①腹臥位後面抵抗','②背臥位伸展位前面抵抗','③座位膝90°屈曲位前面抵抗','④側臥位重力に抗して伸展','⑤座位伸展位から屈曲後面抵抗'],
+  10: ['①大腿直筋・外側広筋・内側広筋・中間広筋','②大腿直筋・大腿二頭筋・縫工筋・薄筋','③半腱様筋・半膜様筋・大腿二頭筋・大腿直筋','④外側広筋・内側広筋・腓腹筋・ヒラメ筋','⑤大腿直筋・大腿筋膜張筋・縫工筋・外側広筋'],
 };
 
 document.querySelectorAll('.opt').forEach(el => {
@@ -547,7 +547,7 @@ function dlCSV() {
   csv += row + '\n';
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8;'}));
-  a.download = '股関節ROM_MMT_'+sid+'_'+sname+'.csv';
+  a.download = '膝関節ROM_MMT_'+sid+'_'+sname+'.csv';
   a.click();
 }
 

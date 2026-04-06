@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>前腕・肩甲帯 ROM・MMT 確認テスト</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000; font-size: 16px; padding-bottom: 40px; }
+.wrap { max-width: 640px; margin: 0 auto; background: #fff; box-shadow: 0 2px 16px rgba(0,0,0,0.08); }
+.hdr { background: #2563eb; padding: 20px; color: white; position: relative; }
+.hdr h1 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; padding-right: 88px; }
+.hdr p  { font-size: 0.8rem; opacity: 0.75; }
+.menu-btn {
+  position: absolute; top: 14px; right: 14px;
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.18); border: none; border-radius: 6px;
+  color: white; font-size: 1.4rem; font-weight: 900;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  line-height: 1; user-select: none; letter-spacing: -1px;
+}
+.menu-btn:hover { background: rgba(255,255,255,0.30); }
+.reset-btn {
+  position: absolute; top: 14px; right: 54px;
+  height: 32px; padding: 0 8px;
+  background: rgba(255,255,255,0.18); border: none; border-radius: 6px;
+  color: white; font-size: 0.72rem; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  user-select: none; white-space: nowrap; letter-spacing: 0.02em;
+}
+.reset-btn:hover { background: rgba(255,100,100,0.45); }
+.menu-drop {
+  display: none; position: absolute; top: 56px; right: 14px;
+  background: white; border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  padding: 16px; width: 264px; z-index: 200;
+}
+.menu-drop.open { display: block; }
+.menu-drop-title { font-size: 0.78rem; font-weight: 700; color: #64748b; letter-spacing: 0.06em; margin-bottom: 10px; }
+.menu-drop input[type="password"] {
+  width: 100%; border: 1.5px solid #e2e8f0; border-radius: 8px;
+  padding: 9px 12px; font-size: 0.9rem; font-family: inherit;
+  outline: none; margin-bottom: 8px;
+}
+.menu-drop input[type="password"]:focus { border-color: #2563eb; }
+.menu-drop-btn {
+  width: 100%; background: #2563eb; color: white; border: none;
+  border-radius: 8px; padding: 10px;
+  font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit;
+}
+.menu-drop-btn:hover { opacity: 0.88; }
+.menu-drop-err { font-size: 0.76rem; color: #dc2626; margin-top: 6px; text-align: center; display: none; }
+.menu-drop-err.on { display: block; }
+.pbar { height: 4px; background: #e2e8f0; }
+.pfill { height: 100%; width: 0%; background: #2563eb; transition: width 0.4s; }
+.sec-lbl { background: #1e40af; color: white; padding: 8px 20px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.06em; }
+.stu { padding: 16px 20px; border-bottom: 1px solid #e2e8f0; }
+.stu-lbl { font-size: 0.72rem; font-weight: 700; color: #94a3b8; letter-spacing: 0.08em; margin-bottom: 12px; }
+.field { margin-bottom: 10px; }
+.field label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 5px; }
+.field label span { color: #dc2626; }
+.field input {
+  display: block; width: 100%; border: 1.5px solid #e2e8f0; border-radius: 8px;
+  padding: 12px 14px; font-size: 1rem; font-family: inherit; background: #f8fafc; outline: none;
+}
+.field input:focus { border-color: #2563eb; background: white; }
+.field input.err { border-color: #dc2626; }
+.errtxt { font-size: 0.76rem; color: #dc2626; margin-top: 4px; display: none; }
+.errtxt.on { display: block; }
+.q { border-top: 1px solid #e2e8f0; }
+.q-problem { background: #fff; padding: 18px 20px 16px; }
+.q-answer  { background: #fff; padding: 16px 20px 20px; }
+.qhead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.qno { font-size: 1.2rem; font-weight: 800; color: #2563eb; background: #eff6ff; border-radius: 8px; padding: 6px 16px; }
+.qno.ok { background: #dcfce7; color: #16a34a; }
+.qno.ng { background: #fee2e2; color: #dc2626; }
+.qtxt { font-size: 1rem; font-weight: 500; line-height: 1.85; }
+.qtxt em { font-style: normal; font-weight: 700; }
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opt {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px; min-height: 48px;
+  border: 1.5px solid #bfdbfe; border-radius: 10px;
+  cursor: pointer; background: #dbeafe; user-select: none;
+}
+.opt:hover { border-color: #2563eb; background: #3b82f6; color: #fff; }
+.opt.sel { border-color: #1d4ed8; background: #1d4ed8; color: #fff; }
+.opt.crt { border-color: #4ade80 !important; background: #166534 !important; cursor: default; }
+.opt.wrg { border-color: #f87171 !important; background: #991b1b !important; cursor: default; }
+.opt.done { cursor: default; }
+.opt.done:hover { border-color: #bfdbfe; background: #dbeafe; color: #000; }
+.opt.crt:hover { border-color: #4ade80 !important; background: #166534 !important; }
+.opt.wrg:hover { border-color: #f87171 !important; background: #991b1b !important; }
+.dot { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; border-radius: 50%; border: 2px solid #475569; background: transparent; position: relative; }
+.opt.sel .dot, .opt.crt .dot, .opt.wrg .dot { border-color: #fff; background: #fff; }
+.dot::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 7px; height: 7px; border-radius: 50%; background: white; display: none; }
+.opt.sel .dot::after, .opt.crt .dot::after, .opt.wrg .dot::after { display: block; }
+.onum { font-size: 1.1rem; font-weight: 700; color: #1e40af; min-width: 24px; flex-shrink: 0; margin-top: 0; }
+.opt.sel .onum, .opt.crt .onum, .opt.wrg .onum { color: #90f8b0; }
+.otxt { font-size: 0.92rem; line-height: 1.65; flex: 1; color: #000; }
+.opt.sel .otxt, .opt.crt .otxt, .opt.wrg .otxt { color: #fff; }
+.exp { display: none; margin-top: 14px; border-radius: 10px; overflow: hidden; border: 1.5px solid #e2e8f0; }
+.exp.on { display: block; }
+.exp-h { padding: 10px 16px; background: #2563eb; color: white; font-size: 0.88rem; font-weight: 700; }
+.exp-b { padding: 14px 16px; background: #f8fafc; font-size: 0.86rem; line-height: 2.0; }
+.exp-b .g { color: #166534; font-weight: 600; }
+.exp-b .r { color: #991b1b; }
+.exp-b b  { color: #1e40af; }
+.sub { padding: 16px 20px; border-top: 1px solid #e2e8f0; }
+.sub button { display: block; width: 100%; background: #fbbf24; color: #1e3a8a; border: none; border-radius: 10px; padding: 15px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+.sub button:hover { opacity: 0.88; }
+.score { display: none; border-top: 1px solid #e2e8f0; }
+.score.on { display: block; }
+.sc-body { padding: 20px; }
+.sc-score-big { font-size: 2.8rem; font-weight: 800; color: #2563eb; text-align: center; margin: 20px 0 8px; }
+.sc-sub { font-size: 0.82rem; color: #64748b; text-align: center; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hdr">
+  <h1>前腕・肩甲帯 ROM・MMT 確認テスト</h1>
+  <p>ROM 5問 ＋ MMT 5問｜全10問　（<span id="ans-count">0</span>/10問 回答済み）</p>
+  <button class="reset-btn" onclick="confirmReset()">🔄 リセット</button>
+  <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">⋮</button>
+  <div class="menu-drop" id="menuDrop">
+    <div class="menu-drop-title">🔒 教員用メニュー</div>
+    <input type="password" id="menu-pw" placeholder="教員パスワードを入力" onkeydown="if(event.key==='Enter')menuAuth()">
+    <button class="menu-drop-btn" onclick="menuAuth()">認証する</button>
+    <div id="menu-count-wrap" style="display:none;margin-top:10px;">
+      <button onclick="checkCount()" style="width:100%;background:#0f766e;color:white;border:none;border-radius:8px;padding:10px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:6px;">🔄 回答数を確認</button>
+      <div id="menu-count-result" style="text-align:center;font-size:0.95rem;font-weight:700;color:#1e40af;min-height:24px;margin-bottom:6px;"></div>
+      <button onclick="dlCSV()" style="width:100%;background:#2563eb;color:white;border:none;border-radius:8px;padding:10px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;">📥 CSVダウンロード</button>
+    </div>
+    <div class="menu-drop-err" id="menu-err">パスワードが違います</div>
+  </div>
+</div>
+<div class="pbar"><div class="pfill" id="pf"></div></div>
+
+<div class="stu">
+  <div class="stu-lbl">受験者情報</div>
+  <div class="field">
+    <label>学籍番号<span>*</span></label>
+    <input type="text" id="sid" placeholder="例：12345" maxlength="5" inputmode="numeric">
+    <div class="errtxt" id="e-sid">学籍番号を5桁で入力してください</div>
+  </div>
+  <div class="field">
+    <label>氏名（フルネーム）<span>*</span></label>
+    <input type="text" id="sname" placeholder="例：山田 太郎" maxlength="30">
+    <div class="errtxt" id="e-sname">フルネームで入力してください</div>
+  </div>
+</div>
+
+<div class="sec-lbl">📐 ROM（関節可動域測定）前腕・肩甲帯</div>
+
+<!-- Q1 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn1">問1</span></div>
+    <div class="qtxt">前腕<em>回内・回外</em>の参考可動域の組み合わせで<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o1">
+    <div class="opt" data-q="1" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">回内：90°　　回外：90°</span></div>
+    <div class="opt" data-q="1" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">回内：80°　　回外：90°</span></div>
+    <div class="opt" data-q="1" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">回内：90°　　回外：80°</span></div>
+    <div class="opt" data-q="1" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">回内：80°　　回外：80°</span></div>
+    <div class="opt" data-q="1" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">回内：70°　　回外：90°</span></div>
+  </div>
+  <div class="exp" id="x1">
+    <div class="exp-h">✅ 正解：① 回内：90°　回外：90°</div>
+    <div class="exp-b">
+      <span class="g">① 前腕回内・回外の参考可動域はいずれも<b>90°</b>。左右・方向ともに同じ値（2022年改訂基準）。</span><br>
+      <span class="r">② 回内80°は誤り（90°が正しい）</span><br>
+      <span class="r">③ 回外80°は誤り（90°が正しい）</span><br>
+      <span class="r">④ 両方80°は誤り</span><br>
+      <span class="r">⑤ 回内70°は誤り</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q2 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn2">問2</span></div>
+    <div class="qtxt">前腕<em>回内・回外</em>の基本軸と移動軸の組み合わせで<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o2">
+    <div class="opt" data-q="2" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">基本軸：橈骨<br>移動軸：手指を伸展した手掌面</span></div>
+    <div class="opt" data-q="2" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">基本軸：上腕骨<br>移動軸：手指を伸展した手掌面</span></div>
+    <div class="opt" data-q="2" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">基本軸：上腕骨<br>移動軸：尺骨</span></div>
+    <div class="opt" data-q="2" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">基本軸：肘を通る前額面への垂直線<br>移動軸：橈骨</span></div>
+    <div class="opt" data-q="2" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">基本軸：前腕の中央線<br>移動軸：第3中手骨</span></div>
+  </div>
+  <div class="exp" id="x2">
+    <div class="exp-h">✅ 正解：② 基本軸：上腕骨　移動軸：手指を伸展した手掌面</div>
+    <div class="exp-b">
+      <span class="g">② 前腕回内・回外の基本軸は<b>上腕骨</b>、移動軸は<b>手指を伸展した手掌面</b>。測定時は肩の回旋が入らないよう肘を90°に屈曲する。</span><br>
+      <span class="r">① 基本軸「橈骨」は誤り（上腕骨が正しい）</span><br>
+      <span class="r">③ 移動軸「尺骨」は誤り（手掌面が正しい）</span><br>
+      <span class="r">④ 基本軸「肘を通る前額面への垂直線」は<b>肘関節屈曲・伸展</b>の基本軸</span><br>
+      <span class="r">⑤ 基本軸「前腕の中央線」・移動軸「第3中手骨」は<b>手関節橈屈・尺屈</b>の組み合わせ</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q3 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn3">問3</span></div>
+    <div class="qtxt">肩甲帯<em>挙上</em>の参考可動域として<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o3">
+    <div class="opt" data-q="3" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">10°</span></div>
+    <div class="opt" data-q="3" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">15°</span></div>
+    <div class="opt" data-q="3" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">20°</span></div>
+    <div class="opt" data-q="3" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">30°</span></div>
+    <div class="opt" data-q="3" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">45°</span></div>
+  </div>
+  <div class="exp" id="x3">
+    <div class="exp-h">✅ 正解：③ 20°</div>
+    <div class="exp-b">
+      <span class="g">③ 肩甲帯挙上の参考可動域は<b>20°</b>（2022年改訂基準）。屈曲・伸展・前傾・後退もすべて20°。引き下げのみ10°と異なる。</span><br>
+      <span class="r">① 10°は肩甲帯<b>引き下げ（下制）</b>の参考可動域</span><br>
+      <span class="r">② 15°は誤り</span><br>
+      <span class="r">④ 30°は誤り（20°が正しい）</span><br>
+      <span class="r">⑤ 45°は誤り（肩甲帯挙上は20°）</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q4 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn4">問4</span></div>
+    <div class="qtxt">肩甲帯の参考可動域の組み合わせで<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o4">
+    <div class="opt" data-q="4" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">挙上：20°　　引き下げ：20°　　前傾：20°　　後退：20°</span></div>
+    <div class="opt" data-q="4" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">挙上：20°　　引き下げ：10°　　前傾：20°　　後退：20°</span></div>
+    <div class="opt" data-q="4" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">挙上：30°　　引き下げ：10°　　前傾：20°　　後退：20°</span></div>
+    <div class="opt" data-q="4" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">挙上：20°　　引き下げ：10°　　前傾：30°　　後退：20°</span></div>
+    <div class="opt" data-q="4" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">挙上：20°　　引き下げ：10°　　前傾：20°　　後退：10°</span></div>
+  </div>
+  <div class="exp" id="x4">
+    <div class="exp-h">✅ 正解：② 挙上20°・引き下げ10°・前傾20°・後退20°</div>
+    <div class="exp-b">
+      <span class="g">② 肩甲帯の参考可動域：<b>挙上20°・屈曲20°・伸展20°・引き下げ10°</b>。前傾（外転）・後退（内転）もそれぞれ20°。<b>引き下げだけが10°</b>と小さい点が重要。</span><br>
+      <span class="r">① 引き下げ20°は誤り（10°が正しい）</span><br>
+      <span class="r">③ 挙上30°は誤り（20°が正しい）</span><br>
+      <span class="r">④ 前傾30°は誤り（20°が正しい）</span><br>
+      <span class="r">⑤ 後退10°は誤り（20°が正しい）</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q5 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn5">問5</span></div>
+    <div class="qtxt">肩甲帯<em>挙上・引き下げ</em>の基本軸と移動軸の組み合わせで<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o5">
+    <div class="opt" data-q="5" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">基本軸：両側の肩峰を結ぶ線<br>移動軸：頭頂と肩峰を結ぶ線</span></div>
+    <div class="opt" data-q="5" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">基本軸：両側の肩峰を結ぶ線<br>移動軸：肩峰と胸骨上縁を結ぶ線</span></div>
+    <div class="opt" data-q="5" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">基本軸：肩峰を通る床への垂直線<br>移動軸：上腕骨</span></div>
+    <div class="opt" data-q="5" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">基本軸：肩峰を通る矢状面への垂直線<br>移動軸：上腕骨</span></div>
+    <div class="opt" data-q="5" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">基本軸：仙骨後面<br>移動軸：第1胸椎棘突起と第5腰椎棘突起を結ぶ線</span></div>
+  </div>
+  <div class="exp" id="x5">
+    <div class="exp-h">✅ 正解：② 基本軸：両側の肩峰を結ぶ線　移動軸：肩峰と胸骨上縁を結ぶ線</div>
+    <div class="exp-b">
+      <span class="g">② 肩甲帯挙上・引き下げの基本軸は<b>両側の肩峰を結ぶ線</b>、移動軸は<b>肩峰と胸骨上縁を結ぶ線</b>。背面から測定する（2022年改訂基準）。</span><br>
+      <span class="r">① 移動軸「頭頂と肩峰を結ぶ線」は肩甲帯<b>屈曲・伸展</b>の移動軸</span><br>
+      <span class="r">③ 基本軸「肩峰を通る床への垂直線」は<b>肩関節屈曲・伸展・外転</b>の基本軸</span><br>
+      <span class="r">④ 基本軸「肩峰を通る矢状面への垂直線」は<b>肩関節水平屈曲・水平伸展</b>の基本軸</span><br>
+      <span class="r">⑤ 基本軸「仙骨後面」は<b>体幹屈曲・伸展</b>の基本軸</span>
+    </div>
+  </div></div>
+</div>
+
+<div class="sec-lbl">💪 MMT（徒手筋力テスト）主動作筋</div>
+
+<!-- Q6 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn6">問6</span></div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>前腕回内</em>の主動作筋はどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o6">
+    <div class="opt" data-q="6" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">回外筋・上腕二頭筋</span></div>
+    <div class="opt" data-q="6" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">円回内筋・方形回内筋</span></div>
+    <div class="opt" data-q="6" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">上腕筋・腕橈骨筋</span></div>
+    <div class="opt" data-q="6" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">長橈側手根伸筋・短橈側手根伸筋</span></div>
+    <div class="opt" data-q="6" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">上腕三頭筋・肘筋</span></div>
+  </div>
+  <div class="exp" id="x6">
+    <div class="exp-h">✅ 正解：② 円回内筋・方形回内筋</div>
+    <div class="exp-b">
+      <span class="g">② 前腕回内の主動作筋は<b>円回内筋</b>（正中神経 C6,7）と<b>方形回内筋</b>（正中神経 C8,T1）。</span><br>
+      <span class="r">① 回外筋・上腕二頭筋 → <b>前腕回外</b>の主動作筋（回内と拮抗）</span><br>
+      <span class="r">③ 上腕筋・腕橈骨筋 → <b>肘関節屈曲</b>の補助筋（前腕回内ではない）</span><br>
+      <span class="r">④ 長橈側手根伸筋・短橈側手根伸筋 → <b>手関節伸展（背屈）・橈屈</b>の主動作筋</span><br>
+      <span class="r">⑤ 上腕三頭筋・肘筋 → <b>肘関節伸展</b>の主動作筋</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q7 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn7">問7</span></div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>前腕回外</em>の主動作筋はどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o7">
+    <div class="opt" data-q="7" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">円回内筋・方形回内筋</span></div>
+    <div class="opt" data-q="7" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">腕橈骨筋・上腕筋</span></div>
+    <div class="opt" data-q="7" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">回外筋・上腕二頭筋</span></div>
+    <div class="opt" data-q="7" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">上腕三頭筋・肘筋</span></div>
+    <div class="opt" data-q="7" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">長橈側手根伸筋・腕橈骨筋</span></div>
+  </div>
+  <div class="exp" id="x7">
+    <div class="exp-h">✅ 正解：③ 回外筋・上腕二頭筋</div>
+    <div class="exp-b">
+      <span class="g">③ 前腕回外の主動作筋は<b>回外筋</b>（橈骨神経 C6）と<b>上腕二頭筋</b>（筋皮神経 C5,6）。</span><br>
+      <span class="r">① 円回内筋・方形回内筋 → <b>前腕回内</b>の主動作筋（回外と拮抗）</span><br>
+      <span class="r">② 腕橈骨筋・上腕筋 → <b>肘関節屈曲</b>の主動作筋</span><br>
+      <span class="r">④ 上腕三頭筋・肘筋 → <b>肘関節伸展</b>の主動作筋</span><br>
+      <span class="r">⑤ 長橈側手根伸筋 → 手関節伸展に作用（前腕回外の主動作筋ではない）</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q8 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn8">問8</span></div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>肩甲帯挙上</em>の主動作筋はどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o8">
+    <div class="opt" data-q="8" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">前鋸筋</span></div>
+    <div class="opt" data-q="8" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">菱形筋・僧帽筋中部線維</span></div>
+    <div class="opt" data-q="8" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">小胸筋・前鋸筋下部線維</span></div>
+    <div class="opt" data-q="8" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">僧帽筋上部線維・肩甲挙筋</span></div>
+    <div class="opt" data-q="8" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">三角筋・棘上筋</span></div>
+  </div>
+  <div class="exp" id="x8">
+    <div class="exp-h">✅ 正解：④ 僧帽筋上部線維・肩甲挙筋</div>
+    <div class="exp-b">
+      <span class="g">④ 肩甲帯挙上の主動作筋は<b>僧帽筋上部線維</b>（副神経・C3,4）と<b>肩甲挙筋</b>（肩甲背神経 C4,5）。</span><br>
+      <span class="r">① 前鋸筋 → <b>肩甲帯外転（前傾）</b>の主動作筋（長胸神経 C5,6,7）</span><br>
+      <span class="r">② 菱形筋・僧帽筋中部 → <b>肩甲帯内転（後退）</b>の主動作筋</span><br>
+      <span class="r">③ 小胸筋・前鋸筋下部 → 肩甲帯引き下げに関与</span><br>
+      <span class="r">⑤ 三角筋・棘上筋 → <b>肩関節外転</b>の主動作筋</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q9 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn9">問9</span></div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>肩甲帯内転（後退）</em>の主動作筋はどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o9">
+    <div class="opt" data-q="9" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">僧帽筋上部線維・肩甲挙筋</span></div>
+    <div class="opt" data-q="9" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">菱形筋・僧帽筋中部線維</span></div>
+    <div class="opt" data-q="9" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">前鋸筋</span></div>
+    <div class="opt" data-q="9" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">小胸筋・前鋸筋下部線維</span></div>
+    <div class="opt" data-q="9" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">三角筋後部線維・棘下筋</span></div>
+  </div>
+  <div class="exp" id="x9">
+    <div class="exp-h">✅ 正解：② 菱形筋・僧帽筋中部線維</div>
+    <div class="exp-b">
+      <span class="g">② 肩甲帯内転（後退）の主動作筋は<b>菱形筋（大・小）</b>（肩甲背神経 C4,5）と<b>僧帽筋中部線維</b>（副神経）。</span><br>
+      <span class="r">① 僧帽筋上部・肩甲挙筋 → <b>肩甲帯挙上</b>の主動作筋</span><br>
+      <span class="r">③ 前鋸筋 → <b>肩甲帯外転（前傾）</b>の主動作筋（内転と拮抗）</span><br>
+      <span class="r">④ 小胸筋・前鋸筋下部 → 肩甲帯引き下げに関与</span><br>
+      <span class="r">⑤ 三角筋後部・棘下筋 → <b>肩関節外旋</b>の主動作筋</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q10 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn10">問10</span></div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>肩甲帯外転（前傾）</em>の主動作筋はどれか。麻痺すると<em>翼状肩甲</em>が出現する筋を選べ。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o10">
+    <div class="opt" data-q="10" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">菱形筋・僧帽筋中部線維</span></div>
+    <div class="opt" data-q="10" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">僧帽筋上部線維・肩甲挙筋</span></div>
+    <div class="opt" data-q="10" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">前鋸筋</span></div>
+    <div class="opt" data-q="10" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">小胸筋・大胸筋</span></div>
+    <div class="opt" data-q="10" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">広背筋・大円筋</span></div>
+  </div>
+  <div class="exp" id="x10">
+    <div class="exp-h">✅ 正解：③ 前鋸筋</div>
+    <div class="exp-b">
+      <span class="g">③ 肩甲帯外転（前傾）の主動作筋は<b>前鋸筋</b>（長胸神経 C5,6,7）。麻痺すると肩甲骨が背面に突出する<b>翼状肩甲（winging）</b>が出現する。臨床上重要な所見。</span><br>
+      <span class="r">① 菱形筋・僧帽筋中部 → <b>肩甲帯内転（後退）</b>の主動作筋（前傾と拮抗）</span><br>
+      <span class="r">② 僧帽筋上部・肩甲挙筋 → <b>肩甲帯挙上</b>の主動作筋</span><br>
+      <span class="r">④ 大胸筋・小胸筋 → 肩関節内転・屈曲に関与（前鋸筋の補助的役割）</span><br>
+      <span class="r">⑤ 広背筋・大円筋 → <b>肩関節伸展・内旋・内転</b>の主動作筋</span>
+    </div>
+  </div></div>
+</div>
+
+<div class="sub">
+  <button onclick="goScore()">結果を見る</button>
+</div>
+
+<div class="score" id="sc">
+  <div class="sc-body">
+    <div class="sc-score-big" id="sc-pt">- / -問　正解</div>
+    <div class="sc-sub" id="sc-msg"></div>
+    <div style="background:#fef9c3;border-radius:8px;padding:12px 16px;font-size:0.82rem;color:#92400e;text-align:center;margin-top:8px;">
+      ✅ 回答を送信しました。再回答はできません。リセットする場合は右上の「🔄 リセット」ボタンを押してください。
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+const ans = {};
+const COR = {1:1, 2:2, 3:3, 4:2, 5:2, 6:2, 7:3, 8:4, 9:2, 10:3};
+const N = 10;
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzdGzlEK6wYWE1DMK8fN1yrOPKsj5yBq1F7VPhSvDFrUCFxsoj794QmLngVd7tJm9ksnQ/exec';
+const TEACHER_PW = '5948saya';
+
+const OL = {
+  1:  ['①回内90°回外90°','②回内80°回外90°','③回内90°回外80°','④回内80°回外80°','⑤回内70°回外90°'],
+  2:  ['①基本軸:橈骨/移動軸:手掌面','②基本軸:上腕骨/移動軸:手掌面','③基本軸:上腕骨/移動軸:尺骨','④基本軸:前額面垂直線/移動軸:橈骨','⑤基本軸:前腕中央線/移動軸:第3中手骨'],
+  3:  ['①10°','②15°','③20°','④30°','⑤45°'],
+  4:  ['①挙20引20前20後20','②挙20引10前20後20','③挙30引10前20後20','④挙20引10前30後20','⑤挙20引10前20後10'],
+  5:  ['①基本軸:両肩峰/移動軸:頭頂〜肩峰','②基本軸:両肩峰/移動軸:肩峰〜胸骨上縁','③基本軸:肩峰床垂直線/移動軸:上腕骨','④基本軸:肩峰矢状面垂直線/移動軸:上腕骨','⑤基本軸:仙骨後面/移動軸:第1胸椎〜第5腰椎'],
+  6:  ['①回外筋・上腕二頭筋','②円回内筋・方形回内筋','③上腕筋・腕橈骨筋','④長橈側手根伸筋・短橈側手根伸筋','⑤上腕三頭筋・肘筋'],
+  7:  ['①円回内筋・方形回内筋','②腕橈骨筋・上腕筋','③回外筋・上腕二頭筋','④上腕三頭筋・肘筋','⑤長橈側手根伸筋・腕橈骨筋'],
+  8:  ['①前鋸筋','②菱形筋・僧帽筋中部','③小胸筋・前鋸筋下部','④僧帽筋上部・肩甲挙筋','⑤三角筋・棘上筋'],
+  9:  ['①僧帽筋上部・肩甲挙筋','②菱形筋・僧帽筋中部','③前鋸筋','④小胸筋・前鋸筋下部','⑤三角筋後部・棘下筋'],
+  10: ['①菱形筋・僧帽筋中部','②僧帽筋上部・肩甲挙筋','③前鋸筋','④小胸筋・大胸筋','⑤広背筋・大円筋'],
+};
+
+document.querySelectorAll('.opt').forEach(el => {
+  el.addEventListener('click', function() {
+    if (this.classList.contains('done')) return;
+    const q = +this.dataset.q, v = +this.dataset.v;
+    document.querySelectorAll('#o'+q+' .opt').forEach(o => o.classList.remove('sel'));
+    this.classList.add('sel');
+    ans[q] = v;
+    const d = Object.keys(ans).length;
+    document.getElementById('pf').style.width = (d/N*100)+'%';
+    document.getElementById('ans-count').textContent = d;
+  });
+});
+
+function toggleMenu() {
+  document.getElementById('menuDrop').classList.toggle('open');
+  document.getElementById('menu-pw').value = '';
+  document.getElementById('menu-err').classList.remove('on');
+}
+document.addEventListener('click', e => {
+  if (!document.getElementById('menuBtn').contains(e.target) &&
+      !document.getElementById('menuDrop').contains(e.target)) {
+    document.getElementById('menuDrop').classList.remove('open');
+  }
+});
+function menuAuth() {
+  if (document.getElementById('menu-pw').value === TEACHER_PW) {
+    document.getElementById('menu-err').classList.remove('on');
+    document.getElementById('menu-pw').style.display = 'none';
+    document.querySelector('#menuDrop .menu-drop-btn').style.display = 'none';
+    document.getElementById('menu-count-wrap').style.display = 'block';
+  } else {
+    document.getElementById('menu-err').classList.add('on');
+    document.getElementById('menu-pw').value = '';
+  }
+}
+function checkCount() {
+  const el = document.getElementById('menu-count-result');
+  el.textContent = '📊 OneDriveの quiz_回答収集.xlsx で確認してください';
+  el.style.color = '#1e40af';
+}
+
+function goScore() {
+  const sid = document.getElementById('sid').value.trim();
+  const sname = document.getElementById('sname').value.trim();
+  let err = false;
+  if (!sid || sid.length !== 5) {
+    document.getElementById('sid').classList.add('err');
+    document.getElementById('e-sid').classList.add('on'); err = true;
+  } else {
+    document.getElementById('sid').classList.remove('err');
+    document.getElementById('e-sid').classList.remove('on');
+  }
+  if (sname.length < 3) {
+    document.getElementById('sname').classList.add('err');
+    document.getElementById('e-sname').classList.add('on'); err = true;
+  } else {
+    document.getElementById('sname').classList.remove('err');
+    document.getElementById('e-sname').classList.remove('on');
+  }
+  if (err) { document.getElementById('sid').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  if (Object.keys(ans).length < N) { alert('全ての問題に回答してから「結果を見る」を押してください。'); return; }
+
+  let sc = 0;
+  for (let q = 1; q <= N; q++) {
+    const cor = COR[q], sel = ans[q] || 0;
+    document.querySelectorAll('#o'+q+' .opt').forEach(function(el, i) {
+      el.classList.add('done'); el.classList.remove('sel');
+      if (i+1 === cor)               el.classList.add('crt');
+      if (i+1 === sel && sel !== cor) el.classList.add('wrg');
+    });
+    document.getElementById('x'+q).classList.add('on');
+    const qn = document.getElementById('qn'+q);
+    if (sel === cor) { qn.className = 'qno ok'; sc++; }
+    else               qn.className = 'qno ng';
+  }
+  const msgs = ['基礎から見直しましょう','もう少しです！','半分正解！間違えた問題を確認しましょう','よくできました！','惜しい！もう少しで満点','満点！完璧です 🎉'];
+  document.getElementById('sc-pt').textContent = sc + ' / ' + N + '問　正解';
+  document.getElementById('sc-msg').textContent = msgs[Math.floor(sc/N*5)];
+  document.getElementById('sc').classList.add('on');
+  document.getElementById('sc').scrollIntoView({behavior:'smooth'});
+  document.querySelector('.sub').style.display = 'none';
+
+  const now = new Date();
+  const dt = now.getFullYear()+'/'+(now.getMonth()+1)+'/'+now.getDate()+' '+now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  const payload = {datetime:dt, sid, name:sname, score:sc, sheet:document.title};
+  for (let i = 1; i <= N; i++) {
+    const s = ans[i] || 0;
+    payload['q'+i+'ans'] = s ? OL[i][s-1] : '未回答';
+    payload['q'+i+'ok']  = s === COR[i] ? '○' : (s ? '✕' : '未回答');
+  }
+  fetch(GAS_URL, {method:'POST', mode:'no-cors', body:JSON.stringify(payload)}).catch(()=>{});
+
+  const saveData = {sc, sid, sname, ans: JSON.parse(JSON.stringify(ans))};
+  localStorage.setItem('quiz_done_' + btoa(encodeURIComponent(document.title)), JSON.stringify(saveData));
+}
+
+function dlCSV() {
+  const sid   = document.getElementById('sid').value.trim() || '（未入力）';
+  const sname = document.getElementById('sname').value.trim() || '（未入力）';
+  const now   = new Date();
+  const dt    = now.getFullYear()+'/'+(now.getMonth()+1)+'/'+now.getDate()+' '+now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  let sc = 0;
+  for (let i = 1; i <= N; i++) if (ans[i] === COR[i]) sc++;
+  let csv = '\uFEFF回答日時,学籍番号,氏名,合計点';
+  for (let i = 1; i <= N; i++) csv += ',Q'+i+'回答,Q'+i+'正誤';
+  csv += '\n';
+  let row = '"'+dt+'","'+sid+'","'+sname+'",'+( Object.keys(ans).length > 0 ? sc : '未完了');
+  for (let i = 1; i <= N; i++) {
+    const s = ans[i] || 0;
+    row += ',"'+(s ? OL[i][s-1] : '未回答')+'","'+(s===COR[i]?'○':(s?'✕':'未回答'))+'"';
+  }
+  csv += row + '\n';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8;'}));
+  a.download = '前腕肩甲帯ROM_MMT_'+sid+'_'+sname+'.csv';
+  a.click();
+}
+
+// ── リセット（2回確認）──────────────────────
+function confirmReset() {
+  if (!confirm('本当にリセットしますか？\n入力済みの回答・氏名・学籍番号がすべて消えます。')) return;
+  if (!confirm('もう一度確認します。\nリセットしてよろしいですか？')) return;
+  const key = 'quiz_done_' + btoa(encodeURIComponent(document.title));
+  localStorage.removeItem(key);
+  location.reload();
+}
+
+// ── 回答済み復元 ─────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  const key = 'quiz_done_' + btoa(encodeURIComponent(document.title));
+  const saved = localStorage.getItem(key);
+  if (!saved) return;
+  try {
+    const data = JSON.parse(saved);
+    document.getElementById('sid').value = data.sid || '';
+    document.getElementById('sname').value = data.sname || '';
+    document.getElementById('sid').readOnly = true;
+    document.getElementById('sname').readOnly = true;
+    Object.assign(ans, data.ans);
+    let sc = 0;
+    for (let q = 1; q <= N; q++) {
+      const cor = COR[q], sel = ans[q] || 0;
+      document.querySelectorAll('#o'+q+' .opt').forEach(function(el, i) {
+        el.classList.add('done'); el.classList.remove('sel');
+        if (i+1 === cor)               el.classList.add('crt');
+        if (i+1 === sel && sel !== cor) el.classList.add('wrg');
+      });
+      document.getElementById('x'+q).classList.add('on');
+      const qn = document.getElementById('qn'+q);
+      if (sel === cor) { qn.className = 'qno ok'; sc++; }
+      else               qn.className = 'qno ng';
+    }
+    const msgs = ['基礎から見直しましょう','もう少しです！','半分正解！間違えた問題を確認しましょう','よくできました！','惜しい！もう少しで満点','満点！完璧です 🎉'];
+    document.getElementById('sc-pt').textContent = sc + ' / ' + N + '問　正解';
+    document.getElementById('sc-msg').textContent = msgs[Math.floor(sc/N*5)];
+    document.getElementById('sc').classList.add('on');
+    document.querySelector('.sub').style.display = 'none';
+    document.getElementById('pf').style.width = '100%';
+    document.getElementById('ans-count').textContent = N;
+  } catch(e) {}
+});
+</script>
+</body>
+</html>
