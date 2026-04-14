@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>足関節 ROM・MMT 確認テスト</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000; font-size: 16px; padding-bottom: 40px; }
+.wrap { max-width: 640px; margin: 0 auto; background: #fff; box-shadow: 0 2px 16px rgba(0,0,0,0.08); }
+.hdr { background: #2563eb; padding: 20px; color: white; position: relative; }
+.hdr h1 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; padding-right: 44px; }
+.hdr p  { font-size: 0.8rem; opacity: 0.75; }
+.menu-btn { position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; background: rgba(255,255,255,0.18); border: none; border-radius: 6px; color: white; font-size: 1.4rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; user-select: none; letter-spacing: -1px; }
+.menu-btn:hover { background: rgba(255,255,255,0.30); }
+.menu-drop { display: none; position: absolute; top: 56px; right: 14px; background: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.18); padding: 16px; width: 264px; z-index: 200; }
+.menu-drop.open { display: block; }
+.menu-drop-title { font-size: 0.78rem; font-weight: 700; color: #64748b; letter-spacing: 0.06em; margin-bottom: 10px; }
+.menu-drop input[type="password"] { width: 100%; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 9px 12px; font-size: 0.9rem; font-family: inherit; outline: none; margin-bottom: 8px; }
+.menu-drop input[type="password"]:focus { border-color: #2563eb; }
+.menu-drop-btn { width: 100%; background: #2563eb; color: white; border: none; border-radius: 8px; padding: 10px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+.menu-drop-btn:hover { opacity: 0.88; }
+.menu-drop-err { font-size: 0.76rem; color: #dc2626; margin-top: 6px; text-align: center; display: none; }
+.menu-drop-err.on { display: block; }
+.pbar { height: 4px; background: #e2e8f0; }
+.pfill { height: 100%; width: 0%; background: #2563eb; transition: width 0.4s; }
+.sec-lbl { background: #1e40af; color: white; padding: 8px 20px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.06em; }
+.stu { padding: 16px 20px; border-bottom: 1px solid #e2e8f0; }
+.stu-lbl { font-size: 0.72rem; font-weight: 700; color: #94a3b8; letter-spacing: 0.08em; margin-bottom: 12px; }
+.field { margin-bottom: 10px; }
+.field label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 5px; }
+.field label span { color: #dc2626; }
+.field input { display: block; width: 100%; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; font-size: 1rem; font-family: inherit; background: #f8fafc; outline: none; }
+.field input:focus { border-color: #2563eb; background: white; }
+.field input.err { border-color: #dc2626; }
+.errtxt { font-size: 0.76rem; color: #dc2626; margin-top: 4px; display: none; }
+.errtxt.on { display: block; }
+.q { border-top: 1px solid #e2e8f0; }
+.q-problem { background: #fff; padding: 18px 20px 16px; }
+.q-answer  { background: #fff; padding: 16px 20px 20px; }
+.qhead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.qno { font-size: 1.2rem; font-weight: 800; color: #2563eb; background: #eff6ff; border-radius: 8px; padding: 6px 16px; }
+.qno.ok { background: #dcfce7; color: #16a34a; }
+.qno.ng { background: #fee2e2; color: #dc2626; }
+.qtxt { font-size: 1rem; font-weight: 500; line-height: 1.85; }
+.qtxt em { font-style: normal; font-weight: 700; }
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; min-height: 48px; border: 1.5px solid #bfdbfe; border-radius: 10px; cursor: pointer; background: #dbeafe; user-select: none; }
+.opt:hover { border-color: #2563eb; background: #3b82f6; color: #fff; }
+.opt.sel { border-color: #1d4ed8; background: #1d4ed8; color: #fff; }
+.opt.crt { border-color: #4ade80 !important; background: #166534 !important; cursor: default; }
+.opt.wrg { border-color: #f87171 !important; background: #991b1b !important; cursor: default; }
+.opt.done { cursor: default; }
+.opt.done:hover { border-color: #bfdbfe; background: #dbeafe; color: #000; }
+.opt.crt:hover { border-color: #4ade80 !important; background: #166534 !important; }
+.opt.wrg:hover { border-color: #f87171 !important; background: #991b1b !important; }
+.dot { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; border-radius: 50%; border: 2px solid #475569; background: transparent; position: relative; }
+.opt.sel .dot, .opt.crt .dot, .opt.wrg .dot { border-color: #fff; background: #fff; }
+.dot::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 7px; height: 7px; border-radius: 50%; background: white; display: none; }
+.opt.sel .dot::after, .opt.crt .dot::after, .opt.wrg .dot::after { display: block; }
+.onum { font-size: 1.1rem; font-weight: 700; color: #1e40af; min-width: 24px; flex-shrink: 0; }
+.opt.sel .onum, .opt.crt .onum, .opt.wrg .onum { color: #90f8b0; }
+.otxt { font-size: 0.92rem; line-height: 1.65; flex: 1; color: #000; }
+.opt.sel .otxt, .opt.crt .otxt, .opt.wrg .otxt { color: #fff; }
+.exp { display: none; margin-top: 14px; border-radius: 10px; overflow: hidden; border: 1.5px solid #e2e8f0; }
+.exp.on { display: block; }
+.exp-h { padding: 10px 16px; background: #2563eb; color: white; font-size: 0.88rem; font-weight: 700; }
+.exp-b { padding: 14px 16px; background: #f8fafc; font-size: 0.86rem; line-height: 2.0; }
+.exp-b .g { color: #166534; font-weight: 600; }
+.exp-b .r { color: #991b1b; }
+.exp-b b  { color: #1e40af; }
+.sub { padding: 16px 20px; border-top: 1px solid #e2e8f0; }
+.sub button { display: block; width: 100%; background: #fbbf24; color: #1e3a8a; border: none; border-radius: 10px; padding: 15px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+.sub button:hover { opacity: 0.88; }
+.score { display: none; border-top: 1px solid #e2e8f0; }
+.score.on { display: block; }
+.sc-body { padding: 20px; }
+.sc-score-big { font-size: 2.8rem; font-weight: 800; color: #2563eb; text-align: center; margin: 20px 0 8px; }
+.sc-sub { font-size: 0.82rem; color: #64748b; text-align: center; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <h1>足関節 ROM・MMT 確認テスト</h1>
+  <p>ROM 5問 ＋ MMT 5問｜全10問　（<span id="ans-count">0</span>/10問 回答済み）</p>
+  <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">⋮</button>
+  <div class="menu-drop" id="menuDrop">
+    <div class="menu-drop-title">🔒 教員用メニュー</div>
+    <input type="password" id="menu-pw" placeholder="教員パスワードを入力" onkeydown="if(event.key==='Enter')menuAuth()">
+    <button class="menu-drop-btn" onclick="menuAuth()">認証する</button>
+    <div id="menu-count-wrap" style="display:none;margin-top:10px;">
+      <button onclick="checkCount()" style="width:100%;background:#0f766e;color:white;border:none;border-radius:8px;padding:10px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:6px;">🔄 回答数を確認</button>
+      <div id="menu-count-result" style="text-align:center;font-size:0.95rem;font-weight:700;color:#1e40af;min-height:24px;margin-bottom:6px;"></div>
+      <button onclick="dlCSV()" style="width:100%;background:#2563eb;color:white;border:none;border-radius:8px;padding:10px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;">📥 CSVダウンロード</button>
+      <button onclick="confirmReset()" style="width:100%;background:#dc2626;color:white;border:none;border-radius:8px;padding:10px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;margin-top:6px;">🔄 回答リセット（教員専用）</button>
+    </div>
+    <div class="menu-drop-err" id="menu-err">パスワードが違います</div>
+  </div>
+</div>
+<div class="pbar"><div class="pfill" id="pf"></div></div>
+<div class="stu">
+  <div class="stu-lbl">受験者情報</div>
+  <div class="field">
+    <label>学籍番号<span>*</span></label>
+    <input type="text" id="sid" placeholder="例：12345" maxlength="5" inputmode="numeric">
+    <div class="errtxt" id="e-sid">学籍番号を5桁で入力してください</div>
+  </div>
+  <div class="field">
+    <label>氏名（フルネーム）<span>*</span></label>
+    <input type="text" id="sname" placeholder="例：山田 太郎" maxlength="30">
+    <div class="errtxt" id="e-sname">フルネームで入力してください</div>
+  </div>
+</div>
+<div class="sec-lbl">📐 ROM（関節可動域測定）足関節・足部</div>
+
+<!-- Q1 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn1">問1</span></div>
+    <div class="qtxt">足関節<em>底屈</em>の参考可動域として<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o1">
+    <div class="opt" data-q="1" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">30°</span></div>
+    <div class="opt" data-q="1" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">60°</span></div>
+    <div class="opt" data-q="1" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">20°</span></div>
+    <div class="opt" data-q="1" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">45°</span></div>
+    <div class="opt" data-q="1" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">50°</span></div>
+  </div>
+  <div class="exp" id="x1">
+    <div class="exp-h">✅ 正解：④ 45°</div>
+    <div class="exp-b">
+      <span class="g">④ 足関節底屈の参考可動域は<b>45°</b>（2022年改訂基準）。基本軸は矢状面における腓骨長軸への垂直線、移動軸は足底面。</span><br>
+      <span class="r">① 30°は誤り（45°が正しい。30°は足部内がえしの値）</span><br>
+      <span class="r">② 60°は誤り（45°が正しい）</span><br>
+      <span class="r">③ 20°は<b>足関節背屈</b>の参考可動域（底屈は45°）</span><br>
+      <span class="r">⑤ 50°は誤り（45°が正しい）</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q2 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn2">問2</span></div>
+    <div class="qtxt">足関節<em>底屈・背屈</em>の基本軸と移動軸の組み合わせで<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o2">
+    <div class="opt" data-q="2" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">基本軸：第5中足骨<br>移動軸：腓骨への垂直線</span></div>
+    <div class="opt" data-q="2" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">基本軸：矢状面における腓骨長軸への垂直線<br>移動軸：足底面</span></div>
+    <div class="opt" data-q="2" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">基本軸：前額面における下腿軸への垂直線<br>移動軸：足底面</span></div>
+    <div class="opt" data-q="2" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">基本軸：大腿骨<br>移動軸：腓骨</span></div>
+    <div class="opt" data-q="2" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">基本軸：腓骨<br>移動軸：第5中足骨</span></div>
+  </div>
+  <div class="exp" id="x2">
+    <div class="exp-h">✅ 正解：② 基本軸：矢状面における腓骨長軸への垂直線　移動軸：足底面</div>
+    <div class="exp-b">
+      <span class="g">② 足関節底屈・背屈の基本軸は<b>矢状面における腓骨長軸への垂直線</b>、移動軸は<b>足底面</b>（2022年改訂基準）。測定は膝関節を屈曲位で行う。</span><br>
+      <span class="r">① 基本軸「第5中足骨」・移動軸「腓骨への垂直線」→ 基本軸と移動軸が逆かつ誤り</span><br>
+      <span class="r">③ 基本軸「前額面における下腿軸への垂直線」・移動軸「足底面」→<b>足部内がえし・外がえし</b>の組み合わせ</span><br>
+      <span class="r">④ 大腿骨・腓骨 →<b>膝関節屈曲・伸展</b>の組み合わせ</span><br>
+      <span class="r">⑤ 基本軸「腓骨」は誤り（腓骨長軸への<b>垂直線</b>が正しい）</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q3 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn3">問3</span></div>
+    <div class="qtxt">足部<em>内がえし・外がえし</em>の参考可動域の組み合わせで<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o3">
+    <div class="opt" data-q="3" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">内がえし：20°　　外がえし：30°</span></div>
+    <div class="opt" data-q="3" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">内がえし：30°　　外がえし：30°</span></div>
+    <div class="opt" data-q="3" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">内がえし：30°　　外がえし：20°</span></div>
+    <div class="opt" data-q="3" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">内がえし：45°　　外がえし：20°</span></div>
+    <div class="opt" data-q="3" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">内がえし：20°　　外がえし：20°</span></div>
+  </div>
+  <div class="exp" id="x3">
+    <div class="exp-h">✅ 正解：③ 内がえし：30°　外がえし：20°</div>
+    <div class="exp-b">
+      <span class="g">③ 足部内がえしは<b>30°</b>、外がえしは<b>20°</b>。内がえしの方が外がえしより大きい。</span><br>
+      <span class="r">① 内がえしと外がえしの値が逆（内がえし30°・外がえし20°が正しい）</span><br>
+      <span class="r">② 外がえし30°は誤り（20°が正しい）</span><br>
+      <span class="r">④ 内がえし45°は誤り（30°が正しい。45°は足関節底屈の値）</span><br>
+      <span class="r">⑤ 内がえし20°は誤り（30°が正しい）</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q4 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn4">問4</span></div>
+    <div class="qtxt">足部<em>内がえし・外がえし</em>の基本軸と移動軸の組み合わせで<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o4">
+    <div class="opt" data-q="4" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">基本軸：腓骨への垂直線<br>移動軸：第5中足骨</span></div>
+    <div class="opt" data-q="4" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">基本軸：足底面<br>移動軸：下腿軸への垂直線</span></div>
+    <div class="opt" data-q="4" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">基本軸：大腿骨<br>移動軸：腓骨</span></div>
+    <div class="opt" data-q="4" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">基本軸：前額面における下腿軸への垂直線<br>移動軸：足底面</span></div>
+    <div class="opt" data-q="4" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">基本軸：下腿中央線<br>移動軸：第2中足骨</span></div>
+  </div>
+  <div class="exp" id="x4">
+    <div class="exp-h">✅ 正解：④ 基本軸：前額面における下腿軸への垂直線　移動軸：足底面</div>
+    <div class="exp-b">
+      <span class="g">④ 足部内がえし・外がえしの基本軸は<b>前額面における下腿軸への垂直線</b>、移動軸は<b>足底面</b>（2022年改訂基準）。測定は膝関節屈曲位・足関節0度で行う。</span><br>
+      <span class="r">① 腓骨への垂直線・第5中足骨 →<b>足関節底屈・背屈（旧基準）</b>の組み合わせ</span><br>
+      <span class="r">② 基本軸と移動軸が逆（基本軸＝前額面における下腿軸への垂直線が正しい）</span><br>
+      <span class="r">③ 大腿骨・腓骨 →<b>膝関節屈曲・伸展</b>の組み合わせ（足部ではない）</span><br>
+      <span class="r">⑤ 基本軸「下腿中央線」は誤り（前額面における下腿軸への垂直線が正しい）</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q5 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn5">問5</span></div>
+    <div class="qtxt">足関節<em>背屈</em>の参考可動域として<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o5">
+    <div class="opt" data-q="5" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">30°</span></div>
+    <div class="opt" data-q="5" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">45°</span></div>
+    <div class="opt" data-q="5" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">15°</span></div>
+    <div class="opt" data-q="5" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">20°</span></div>
+    <div class="opt" data-q="5" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">25°</span></div>
+  </div>
+  <div class="exp" id="x5">
+    <div class="exp-h">✅ 正解：② 底屈45°・背屈20°で底屈の方が大きい</div>
+    <div class="exp-b">
+      <span class="g">② 底屈<b>45°</b>・背屈<b>20°</b>はともに正しく、底屈の方が大きいのも正しい。</span><br>
+      <span class="r">① 底屈・背屈の移動軸は<b>足底面</b>（第5中足骨は旧基準。2022年改訂では足底面が正しい）</span><br>
+      <span class="r">③ 内がえしは<b>30°</b>・外がえしは<b>20°</b>（ともに20°は誤り）</span><br>
+      <span class="r">④ 底屈・背屈の基本軸は<b>脛骨</b>（矢状面における腓骨長軸への垂直線）であり、「腓骨そのもの」という表現は誤り</span><br>
+      <span class="r">⑤ 内がえし<b>30°</b>＞外がえし<b>20°</b>で、<b>内がえしの方が大きい</b>（逆は誤り）</span>
+    </div>
+  </div></div>
+</div>
+
+<div class="sec-lbl">💪 MMT（徒手筋力テスト）主動作筋</div>
+
+<!-- Q6 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn6">問6</span></div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>足関節底屈</em>の主動作筋はどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o6">
+    <div class="opt" data-q="6" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">前脛骨筋・長趾伸筋</span></div>
+    <div class="opt" data-q="6" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">後脛骨筋・長趾屈筋</span></div>
+    <div class="opt" data-q="6" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">下腿三頭筋（腓腹筋・ヒラメ筋）</span></div>
+    <div class="opt" data-q="6" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">長腓骨筋・短腓骨筋</span></div>
+    <div class="opt" data-q="6" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">長趾屈筋・長母趾屈筋</span></div>
+  </div>
+  <div class="exp" id="x6">
+    <div class="exp-h">✅ 正解：③ 下腿三頭筋（腓腹筋・ヒラメ筋）</div>
+    <div class="exp-b">
+      <span class="g">③ 足関節底屈の主動作筋は<b>下腿三頭筋</b>（腓腹筋：脛骨神経 S1,2 / ヒラメ筋：脛骨神経 S1,2）。腓腹筋は二関節筋で膝屈曲にも関与する。</span><br>
+      <span class="r">① 前脛骨筋・長趾伸筋 →<b>足関節背屈</b>の主動作筋（底屈と対立）</span><br>
+      <span class="r">② 後脛骨筋・長趾屈筋 →<b>足部内反・趾の屈曲</b>に関与</span><br>
+      <span class="r">④ 長腓骨筋・短腓骨筋 →<b>足部外反</b>の主動作筋</span><br>
+      <span class="r">⑤ 長趾屈筋・長母趾屈筋 → 趾の屈曲に関与（底屈の主動作筋ではない）</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q7 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn7">問7</span></div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>足関節背屈</em>の主動作筋はどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o7">
+    <div class="opt" data-q="7" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">下腿三頭筋（腓腹筋・ヒラメ筋）</span></div>
+    <div class="opt" data-q="7" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">後脛骨筋・長趾屈筋</span></div>
+    <div class="opt" data-q="7" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">長腓骨筋・短腓骨筋</span></div>
+    <div class="opt" data-q="7" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">前脛骨筋・長趾伸筋・長母趾伸筋</span></div>
+    <div class="opt" data-q="7" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">長趾屈筋・長母趾屈筋</span></div>
+  </div>
+  <div class="exp" id="x7">
+    <div class="exp-h">✅ 正解：④ 前脛骨筋・長趾伸筋・長母趾伸筋</div>
+    <div class="exp-b">
+      <span class="g">④ 足関節背屈の主動作筋は<b>前脛骨筋</b>（深腓骨神経 L4,5）・<b>長趾伸筋</b>（深腓骨神経 L4〜S1）・<b>長母趾伸筋</b>（深腓骨神経 L4〜S1）。</span><br>
+      <span class="r">① 下腿三頭筋 →<b>足関節底屈</b>の主動作筋（背屈と対立）</span><br>
+      <span class="r">② 後脛骨筋・長趾屈筋 →<b>足部内反・趾屈曲</b>に関与</span><br>
+      <span class="r">③ 長腓骨筋・短腓骨筋 →<b>足部外反</b>の主動作筋</span><br>
+      <span class="r">⑤ 長趾屈筋・長母趾屈筋 → 趾の屈曲に関与（背屈の主動作筋ではない）</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q8 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn8">問8</span></div>
+    <div class="qtxt">Danielsらの徒手筋力テストで<em>足部内がえし</em>の主動作筋はどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o8">
+    <div class="opt" data-q="8" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">下腿三頭筋（腓腹筋・ヒラメ筋）</span></div>
+    <div class="opt" data-q="8" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">長腓骨筋・短腓骨筋</span></div>
+    <div class="opt" data-q="8" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">後脛骨筋</span></div>
+    <div class="opt" data-q="8" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">長趾伸筋・長母趾伸筋</span></div>
+    <div class="opt" data-q="8" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">長趾屈筋・長母趾屈筋</span></div>
+  </div>
+  <div class="exp" id="x8">
+    <div class="exp-h">✅ 正解：③ 後脛骨筋</div>
+    <div class="exp-b">
+      <span class="g">③ 足部内がえしの主動作筋として、Danielsらでは<b>後脛骨筋</b>（脛骨神経 L4,5）が代表的に挙げられる。内側（脛骨側）に付着し、足部を内反・底屈させる。</span><br>
+      <span class="r">① 下腿三頭筋 →<b>足関節底屈</b>の主動作筋（内がえしの主動作筋ではない）</span><br>
+      <span class="r">② 長腓骨筋・短腓骨筋 →<b>足部外がえし（外反）</b>の主動作筋（内がえしと拮抗）</span><br>
+      <span class="r">④ 長趾伸筋・長母趾伸筋 → 背屈・趾伸展に関与（内がえしの主動作筋ではない）</span><br>
+      <span class="r">⑤ 長趾屈筋・長母趾屈筋 → 趾屈曲に関与（内がえしの主動作筋ではない）</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q9 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn9">問9</span></div>
+    <div class="qtxt">Danielsらの徒手筋力テスト（段階5・4）で<em>足の内がえし</em>の検査肢位として<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o9">
+    <div class="opt" data-q="9" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">背臥位・足関節底屈位で足の外側（第5中足骨）に外がえし方向の抵抗をかける</span></div>
+    <div class="opt" data-q="9" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">座位・足関節中間位で足の外側に外がえし方向の抵抗をかける</span></div>
+    <div class="opt" data-q="9" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">背臥位・足関節底屈位で足の内側（第1中足骨）に外がえし方向の抵抗をかける</span></div>
+    <div class="opt" data-q="9" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">腹臥位・足関節底屈位で足底全体に底屈方向の抵抗をかける</span></div>
+    <div class="opt" data-q="9" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">側臥位で重力に抗して内がえしを行う</span></div>
+  </div>
+  <div class="exp" id="x9">
+    <div class="exp-h">✅ 正解：② 座位・足関節中間位で足の外側に外がえし方向の抵抗をかける</div>
+    <div class="exp-b">
+      <span class="g">② 足の内がえし（段階5・4）は<b>座位</b>で足関節を中間位に保持し、<b>足の外側（第5中足骨）</b>に外がえし方向の抵抗をかける。前脛骨筋・後脛骨筋が主動作筋。</span><br>
+      <span class="r">① 背臥位・足の外側（第5中足骨）への外がえし方向抵抗 → 抵抗部位はよいが肢位が誤り（座位が正しい）</span><br>
+      <span class="r">③ 背臥位・足の内側（第1中足骨）への外がえし方向抵抗 → 肢位も抵抗部位も誤り</span><br>
+      <span class="r">④ 腹臥位・足底全体への底屈方向抵抗 →<b>足関節底屈</b>の検査肢位</span><br>
+      <span class="r">⑤ 側臥位 →<b>段階2</b>（重力除去位）の検査肢位（段階5・4ではない）</span>
+    </div>
+  </div></div>
+</div>
+
+<!-- Q10 -->
+<div class="q">
+  <div class="q-problem">
+    <div class="qhead"><span class="qno" id="qn10">問10</span></div>
+    <div class="qtxt">Danielsらの徒手筋力テスト（段階5・4）で<em>足関節底屈</em>の検査肢位として<em>正しい</em>のはどれか。</div>
+  </div>
+  <div class="q-answer"><div class="opts" id="o10">
+    <div class="opt" data-q="10" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">背臥位・足底前面に背屈方向の抵抗をかける</span></div>
+    <div class="opt" data-q="10" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">腹臥位・足底後面に底屈方向の抵抗をかける</span></div>
+    <div class="opt" data-q="10" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">立位で片足立ちになりつま先立ちを繰り返す</span></div>
+    <div class="opt" data-q="10" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">座位・足関節中間位から底屈させ足背に抵抗をかける</span></div>
+    <div class="opt" data-q="10" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">側臥位で重力に抗して底屈させる</span></div>
+  </div>
+  <div class="exp" id="x10">
+    <div class="exp-h">✅ 正解：③ 立位で片足立ちになりつま先立ちを繰り返す</div>
+    <div class="exp-b">
+      <span class="g">③ 足関節底屈<b>段階5</b>の検査は<b>立位での片足つま先立ち</b>を繰り返す（Daniels法）。25回以上できれば段階5。体重に抗した最も負荷の大きい方法。</span><br>
+      <span class="r">① 背臥位・足底前面に背屈方向の抵抗 →<b>足関節背屈</b>（段階5・4）の検査肢位</span><br>
+      <span class="r">② 腹臥位・足底後面に底屈方向の抵抗 → 方向が誤り。腹臥位で足底前面に<b>背屈方向</b>の抵抗が正しい（段階4）</span><br>
+      <span class="r">④ 座位・足背に抵抗 →<b>足関節背屈</b>の検査肢位</span><br>
+      <span class="r">⑤ 側臥位 →<b>段階2</b>（重力除去位）の検査肢位</span>
+    </div>
+  </div></div>
+</div>
+<div class="sub">
+  <button onclick="goScore()">結果を見る</button>
+</div>
+<div class="score" id="sc">
+  <div class="sc-body">
+    <div class="sc-score-big" id="sc-pt">- / -問　正解</div>
+    <div class="sc-sub" id="sc-msg"></div>
+    <div style="background:#fef9c3;border-radius:8px;padding:12px 16px;font-size:0.82rem;color:#92400e;text-align:center;margin-top:8px;">
+      ✅ 回答を送信しました。再回答はできません。
+    </div>
+  </div>
+</div>
+</div>
+<script>
+const ans = {};
+const COR = {1:4,2:2,3:3,4:4,5:4,6:3,7:4,8:3,9:2,10:3};
+const N = 10;
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyqagCUeeasVWPKkCjhUnQKoEE5E3juIcAq873BpVL7yi-kXdxs6tD9edV_zG-T9ajR/exec';
+const TEACHER_PW = '5948saya';
+const OL = {
+  1:  ['①30°','②60°','③20°','④45°','⑤50°'],
+  2:  ['①基本軸:第5中足骨/移動軸:腓骨垂直線','②基本軸:矢状面腓骨長軸垂直線/移動軸:足底面','③基本軸:前額面下腿軸垂直線/移動軸:足底面','④基本軸:大腿骨/移動軸:腓骨','⑤基本軸:腓骨/移動軸:第5中足骨'],
+  3:  ['①内がえし20°外がえし30°','②内がえし30°外がえし30°','③内がえし30°外がえし20°','④内がえし45°外がえし20°','⑤内がえし20°外がえし20°'],
+  4:  ['①腓骨垂直線/第5中足骨','②足底面/下腿軸垂直線','③大腿骨/腓骨','④前額面下腿軸垂直線/足底面','⑤下腿中央線/第2中足骨'],
+  5:  ['①30°','②45°','③15°','④20°','⑤25°'],
+  6:  ['①前脛骨筋・長趾伸筋','②後脛骨筋・長趾屈筋','③下腿三頭筋','④長腓骨筋・短腓骨筋','⑤長趾屈筋・長母趾屈筋'],
+  7:  ['①下腿三頭筋','②後脛骨筋・長趾屈筋','③長腓骨筋・短腓骨筋','④前脛骨筋・長趾伸筋・長母趾伸筋','⑤長趾屈筋・長母趾屈筋'],
+  8:  ['①下腿三頭筋','②長腓骨筋・短腓骨筋','③後脛骨筋','④長趾伸筋・長母趾伸筋','⑤長趾屈筋・長母趾屈筋'],
+  9:  ['①背臥位足外側に外がえし抵抗','②座位足外側に外がえし抵抗','③背臥位足内側に外がえし抵抗','④腹臥位足底底屈抵抗','⑤側臥位重力除去内がえし'],
+  10: ['①背臥位足底前面背屈方向抵抗','②腹臥位足底後面底屈方向抵抗','③立位片足つま先立ち繰り返し','④座位足背に抵抗','⑤側臥位底屈'],
+};
+document.querySelectorAll('.opt').forEach(el => {
+  el.addEventListener('click', function() {
+    if (this.classList.contains('done')) return;
+    const q = +this.dataset.q, v = +this.dataset.v;
+    document.querySelectorAll('#o'+q+' .opt').forEach(o => o.classList.remove('sel'));
+    this.classList.add('sel');
+    ans[q] = v;
+    const d = Object.keys(ans).length;
+    document.getElementById('pf').style.width = (d/N*100)+'%';
+    document.getElementById('ans-count').textContent = d;
+  });
+});
+function toggleMenu() {
+  document.getElementById('menuDrop').classList.toggle('open');
+  document.getElementById('menu-pw').value = '';
+  document.getElementById('menu-err').classList.remove('on');
+}
+document.addEventListener('click', e => {
+  if (!document.getElementById('menuBtn').contains(e.target) &&
+      !document.getElementById('menuDrop').contains(e.target))
+    document.getElementById('menuDrop').classList.remove('open');
+});
+function menuAuth() {
+  if (document.getElementById('menu-pw').value === TEACHER_PW) {
+    document.getElementById('menu-err').classList.remove('on');
+    document.getElementById('menu-pw').style.display = 'none';
+    document.querySelector('#menuDrop .menu-drop-btn').style.display = 'none';
+    document.getElementById('menu-count-wrap').style.display = 'block';
+  } else {
+    document.getElementById('menu-err').classList.add('on');
+    document.getElementById('menu-pw').value = '';
+  }
+}
+function checkCount() {
+  const el = document.getElementById('menu-count-result');
+  el.textContent = '📊 OneDriveの quiz_回答収集.xlsx で確認してください';
+  el.style.color = '#1e40af';
+}
+function goScore() {
+  const sid = document.getElementById('sid').value.trim();
+  const sname = document.getElementById('sname').value.trim();
+  let err = false;
+  if (!sid || sid.length !== 5) {
+    document.getElementById('sid').classList.add('err');
+    document.getElementById('e-sid').classList.add('on'); err = true;
+  } else {
+    document.getElementById('sid').classList.remove('err');
+    document.getElementById('e-sid').classList.remove('on');
+  }
+  if (sname.length < 3) {
+    document.getElementById('sname').classList.add('err');
+    document.getElementById('e-sname').classList.add('on'); err = true;
+  } else {
+    document.getElementById('sname').classList.remove('err');
+    document.getElementById('e-sname').classList.remove('on');
+  }
+  if (err) { document.getElementById('sid').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  if (Object.keys(ans).length < N) { alert('全ての問題に回答してから「結果を見る」を押してください。'); return; }
+  let sc = 0;
+  for (let q = 1; q <= N; q++) {
+    const cor = COR[q], sel = ans[q] || 0;
+    document.querySelectorAll('#o'+q+' .opt').forEach(function(el, i) {
+      el.classList.add('done'); el.classList.remove('sel');
+      if (i+1 === cor)               el.classList.add('crt');
+      if (i+1 === sel && sel !== cor) el.classList.add('wrg');
+    });
+    document.getElementById('x'+q).classList.add('on');
+    const qn = document.getElementById('qn'+q);
+    if (sel === cor) { qn.className = 'qno ok'; sc++; }
+    else               qn.className = 'qno ng';
+  }
+  const msgs = ['基礎から見直しましょう','もう少しです！','半分正解！間違えた問題を確認しましょう','よくできました！','惜しい！もう少しで満点','満点！完璧です 🎉'];
+  document.getElementById('sc-pt').textContent = sc + ' / ' + N + '問　正解';
+  document.getElementById('sc-msg').textContent = msgs[Math.floor(sc/N*5)];
+  document.getElementById('sc').classList.add('on');
+  document.getElementById('sc').scrollIntoView({behavior:'smooth'});
+  document.querySelector('.sub').style.display = 'none';
+  const now = new Date();
+  const dt = now.getFullYear()+'/'+(now.getMonth()+1)+'/'+now.getDate()+' '+now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  const payload = {datetime:dt, sid, name:sname, score:sc, sheet:document.title};
+  for (let i = 1; i <= N; i++) {
+    const s = ans[i] || 0;
+    payload['q'+i+'ans'] = s ? OL[i][s-1] : '未回答';
+    payload['q'+i+'ok']  = s === COR[i] ? '○' : (s ? '✕' : '未回答');
+  }
+  fetch(GAS_URL, {method:'POST', mode:'no-cors', body:JSON.stringify(payload)}).catch(()=>{});
+  const saveData = {sc, sid, sname, ans: JSON.parse(JSON.stringify(ans))};
+  localStorage.setItem('quiz_done_' + btoa(encodeURIComponent(document.title)), JSON.stringify(saveData));
+}
+function dlCSV() {
+  const sid   = document.getElementById('sid').value.trim() || '（未入力）';
+  const sname = document.getElementById('sname').value.trim() || '（未入力）';
+  const now   = new Date();
+  const dt    = now.getFullYear()+'/'+(now.getMonth()+1)+'/'+now.getDate()+' '+now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  let sc = 0;
+  for (let i = 1; i <= N; i++) if (ans[i] === COR[i]) sc++;
+  let csv = '\uFEFF回答日時,学籍番号,氏名,合計点';
+  for (let i = 1; i <= N; i++) csv += ',Q'+i+'回答,Q'+i+'正誤';
+  csv += '\n';
+  let row = '"'+dt+'","'+sid+'","'+sname+'",'+( Object.keys(ans).length > 0 ? sc : '未完了');
+  for (let i = 1; i <= N; i++) {
+    const s = ans[i] || 0;
+    row += ',"'+(s ? OL[i][s-1] : '未回答')+'","'+(s===COR[i]?'○':(s?'✕':'未回答'))+'"';
+  }
+  csv += row + '\n';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8;'}));
+  a.download = '足関節ROM_MMT_'+sid+'_'+sname+'.csv';
+  a.click();
+}
+window.addEventListener('DOMContentLoaded', function() {
+  const key = 'quiz_done_' + btoa(encodeURIComponent(document.title));
+  const saved = localStorage.getItem(key);
+  if (!saved) return;
+  try {
+    const data = JSON.parse(saved);
+    document.getElementById('sid').value = data.sid || '';
+    document.getElementById('sname').value = data.sname || '';
+    document.getElementById('sid').readOnly = true;
+    document.getElementById('sname').readOnly = true;
+    Object.assign(ans, data.ans);
+    let sc = 0;
+    for (let q = 1; q <= N; q++) {
+      const cor = COR[q], sel = ans[q] || 0;
+      document.querySelectorAll('#o'+q+' .opt').forEach(function(el, i) {
+        el.classList.add('done'); el.classList.remove('sel');
+        if (i+1 === cor)               el.classList.add('crt');
+        if (i+1 === sel && sel !== cor) el.classList.add('wrg');
+      });
+      document.getElementById('x'+q).classList.add('on');
+      const qn = document.getElementById('qn'+q);
+      if (sel === cor) { qn.className = 'qno ok'; sc++; }
+      else               qn.className = 'qno ng';
+    }
+    const msgs = ['基礎から見直しましょう','もう少しです！','半分正解！間違えた問題を確認しましょう','よくできました！','惜しい！もう少しで満点','満点！完璧です 🎉'];
+    document.getElementById('sc-pt').textContent = sc + ' / ' + N + '問　正解';
+    document.getElementById('sc-msg').textContent = msgs[Math.floor(sc/N*5)];
+    document.getElementById('sc').classList.add('on');
+    document.querySelector('.sub').style.display = 'none';
+    document.getElementById('pf').style.width = '100%';
+    document.getElementById('ans-count').textContent = N;
+  } catch(e) {}
+});
+
+function confirmReset() {
+  if (!confirm('本当にリセットしますか？\n入力済みの回答・氏名・学籍番号がすべて消えます。')) return;
+  if (!confirm('もう一度確認します。\nリセットしてよろしいですか？')) return;
+  const key = 'quiz_done_' + btoa(encodeURIComponent(document.title));
+  localStorage.removeItem(key);
+  location.reload();
+}
+</script>
+</body>
+</html>
