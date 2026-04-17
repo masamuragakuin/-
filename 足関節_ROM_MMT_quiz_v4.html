@@ -78,6 +78,10 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 .sc-body { padding: 20px; }
 .sc-score-big { font-size: 2.8rem; font-weight: 800; color: #2563eb; text-align: center; margin: 20px 0 8px; }
 .sc-sub { font-size: 0.82rem; color: #64748b; text-align: center; margin-bottom: 14px; }
+
+.opt { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+* { -webkit-user-select: none; }
+input { -webkit-user-select: text; user-select: text; }
 </style>
 </head>
 <body>
@@ -397,17 +401,22 @@ const OL = {
   9:  ['①背臥位足外側に外がえし抵抗','②座位足外側に外がえし抵抗','③背臥位足内側に外がえし抵抗','④腹臥位足底底屈抵抗','⑤側臥位重力除去内がえし'],
   10: ['①背臥位足底前面背屈方向抵抗','②腹臥位足底後面底屈方向抵抗','③立位片足つま先立ち繰り返し','④座位足背に抵抗','⑤側臥位底屈'],
 };
-document.querySelectorAll('.opt').forEach(el => {
-  el.addEventListener('click', function() {
+document.querySelectorAll('.opt').forEach(function(el) {
+  function handleSelect() {
     if (this.classList.contains('done')) return;
-    const q = +this.dataset.q, v = +this.dataset.v;
-    document.querySelectorAll('#o'+q+' .opt').forEach(o => o.classList.remove('sel'));
+    var q = +this.dataset.q, v = +this.dataset.v;
+    document.querySelectorAll('#o'+q+' .opt').forEach(function(o) { o.classList.remove('sel'); });
     this.classList.add('sel');
     ans[q] = v;
-    const d = Object.keys(ans).length;
+    var d = Object.keys(ans).length;
     document.getElementById('pf').style.width = (d/N*100)+'%';
     document.getElementById('ans-count').textContent = d;
-  });
+  }
+  el.addEventListener('click', handleSelect);
+  el.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    handleSelect.call(this);
+  }, {passive: false});
 });
 function toggleMenu() {
   document.getElementById('menuDrop').classList.toggle('open');

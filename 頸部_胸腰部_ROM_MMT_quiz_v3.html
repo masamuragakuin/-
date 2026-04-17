@@ -78,6 +78,10 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 .sc-body { padding: 20px; }
 .sc-score-big { font-size: 2.8rem; font-weight: 800; color: #2563eb; text-align: center; margin: 20px 0 8px; }
 .sc-sub { font-size: 0.82rem; color: #64748b; text-align: center; margin-bottom: 14px; }
+
+.opt { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+* { -webkit-user-select: none; }
+input { -webkit-user-select: text; user-select: text; }
 </style>
 </head>
 <body>
@@ -276,15 +280,15 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
   </div>
   <div class="q-answer"><div class="opts" id="o7">
     <div class="opt" data-q="7" data-v="1"><span class="dot"></span><span class="onum">①</span><span class="otxt">胸鎖乳突筋・前斜角筋</span></div>
-    <div class="opt" data-q="7" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">頭板状筋・頸板状筋・頭半棘筋</span></div>
+    <div class="opt" data-q="7" data-v="2"><span class="dot"></span><span class="onum">②</span><span class="otxt">頚最長筋・頚半棘筋・頚腸肋筋</span></div>
     <div class="opt" data-q="7" data-v="3"><span class="dot"></span><span class="onum">③</span><span class="otxt">広背筋・脊柱起立筋</span></div>
     <div class="opt" data-q="7" data-v="4"><span class="dot"></span><span class="onum">④</span><span class="otxt">腸腰筋・腹直筋</span></div>
     <div class="opt" data-q="7" data-v="5"><span class="dot"></span><span class="onum">⑤</span><span class="otxt">僧帽筋上部・肩甲挙筋</span></div>
   </div>
   <div class="exp" id="x7">
-    <div class="exp-h">✅ 正解：② 頭板状筋・頸板状筋・頭半棘筋</div>
+    <div class="exp-h">✅ 正解：② 頚最長筋・頚半棘筋・頚腸肋筋</div>
     <div class="exp-b">
-      <span class="g">② 頸部伸展の主動作筋は<b>頭板状筋・頸板状筋</b>（頸神経後枝）と<b>頭半棘筋</b>（頸神経後枝）。頸部後面に位置し頸部を後方に引く。</span><br>
+      <span class="g">② 頸部伸展の主動作筋は<b>頚最長筋・頚半棘筋・頚腸肋筋</b>（脊髄神経後枝）。頸部後面に位置し頸部を後方に伸展させる。</span><br>
       <span class="r">① 胸鎖乳突筋・前斜角筋 → 頸部<b>屈曲</b>の主動作筋（伸展と拮抗）</span><br>
       <span class="r">③ 広背筋は<b>肩関節内転・伸展</b>の主動作筋。脊柱起立筋は<b>体幹伸展</b>の主動作筋（頸部伸展の主動作筋ではない）</span><br>
       <span class="r">④ 腸腰筋は<b>股関節屈曲</b>、腹直筋は<b>体幹屈曲</b>の主動作筋（頸部と無関係）</span><br>
@@ -392,21 +396,27 @@ const OL = {
   4:  ['①30°','②50°','③60°','④40°','⑤45°'],
   5:  ['①頸部屈曲60°','②胸腰部屈曲60°','③頸部回旋=胸腰部回旋=40°','④胸腰部伸展45°','⑤頸部伸展60°'],
   6:  ['①僧帽筋・頭板状筋','②広背筋・大円筋','③胸鎖乳突筋・前斜角筋','④半棘筋・頭最長筋','⑤大胸筋・前鋸筋'],
-  7:  ['①胸鎖乳突筋・前斜角筋','②頭板状筋・頸板状筋・頭半棘筋','③広背筋・脊柱起立筋','④腸腰筋・腹直筋','⑤僧帽筋上部・肩甲挙筋'],
+  7:  ['①胸鎖乳突筋・前斜角筋','②頚最長筋・頚半棘筋・頚腸肋筋','③広背筋・脊柱起立筋','④腸腰筋・腹直筋','⑤僧帽筋上部・肩甲挙筋'],
   8:  ['①腹臥位・前額部に伸展方向抵抗','②座位・頭頂部に圧迫抵抗','③背臥位・前額部に伸展方向抵抗','④背臥位・あご下顎部に伸展方向抵抗','⑤腹臥位・後頭部に屈曲方向抵抗'],
   9:  ['①脊柱起立筋','②腸腰筋','③腹直筋・外腹斜筋・内腹斜筋','④大殿筋・中殿筋','⑤広背筋・菱形筋'],
   10: ['①腹直筋・外腹斜筋・内腹斜筋','②腸腰筋','③大殿筋・ハムストリングス','④脊柱起立筋','⑤胸鎖乳突筋・斜角筋群'],
 };
-document.querySelectorAll('.opt').forEach(el => {
-  el.addEventListener('click', function() {
+document.querySelectorAll('.opt').forEach(function(el) {
+  function handleSelect() {
     if (this.classList.contains('done')) return;
-    const q = +this.dataset.q, v = +this.dataset.v;
-    document.querySelectorAll('#o'+q+' .opt').forEach(o => o.classList.remove('sel'));
-    this.classList.add('sel'); ans[q] = v;
-    const d = Object.keys(ans).length;
+    var q = +this.dataset.q, v = +this.dataset.v;
+    document.querySelectorAll('#o'+q+' .opt').forEach(function(o) { o.classList.remove('sel'); });
+    this.classList.add('sel');
+    ans[q] = v;
+    var d = Object.keys(ans).length;
     document.getElementById('pf').style.width = (d/N*100)+'%';
     document.getElementById('ans-count').textContent = d;
-  });
+  }
+  el.addEventListener('click', handleSelect);
+  el.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    handleSelect.call(this);
+  }, {passive: false});
 });
 function toggleMenu() { document.getElementById('menuDrop').classList.toggle('open'); document.getElementById('menu-pw').value = ''; document.getElementById('menu-err').classList.remove('on'); }
 document.addEventListener('click', e => { if (!document.getElementById('menuBtn').contains(e.target) && !document.getElementById('menuDrop').contains(e.target)) document.getElementById('menuDrop').classList.remove('open'); });

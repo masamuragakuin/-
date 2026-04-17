@@ -78,6 +78,10 @@ body { background: #f1f5f9; font-family: 'Noto Sans JP', sans-serif; color: #000
 .sc-body { padding: 20px; }
 .sc-score-big { font-size: 2.8rem; font-weight: 800; color: #2563eb; text-align: center; margin: 20px 0 8px; }
 .sc-sub { font-size: 0.82rem; color: #64748b; text-align: center; margin-bottom: 14px; }
+
+.opt { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+* { -webkit-user-select: none; }
+input { -webkit-user-select: text; user-select: text; }
 </style>
 </head>
 <body>
@@ -397,16 +401,22 @@ const OL = {
   9:  ['①前腕回外位・手背に掌屈方向抵抗','②前腕回外位・手掌に背屈方向抵抗','③前腕回内位・手背に掌屈方向抵抗','④前腕中間位・手背に掌屈方向抵抗','⑤前腕回内位・手掌に背屈方向抵抗'],
   10: ['①前腕回内位・手背に掌屈方向抵抗','②前腕回外位・手掌に背屈方向抵抗','③前腕中間位・手背に底屈方向抵抗','④前腕回内位・手掌に背屈方向抵抗','⑤前腕中間位・手掌に掌屈方向抵抗'],
 };
-document.querySelectorAll('.opt').forEach(el => {
-  el.addEventListener('click', function() {
+document.querySelectorAll('.opt').forEach(function(el) {
+  function handleSelect() {
     if (this.classList.contains('done')) return;
-    const q = +this.dataset.q, v = +this.dataset.v;
-    document.querySelectorAll('#o'+q+' .opt').forEach(o => o.classList.remove('sel'));
-    this.classList.add('sel'); ans[q] = v;
-    const d = Object.keys(ans).length;
+    var q = +this.dataset.q, v = +this.dataset.v;
+    document.querySelectorAll('#o'+q+' .opt').forEach(function(o) { o.classList.remove('sel'); });
+    this.classList.add('sel');
+    ans[q] = v;
+    var d = Object.keys(ans).length;
     document.getElementById('pf').style.width = (d/N*100)+'%';
     document.getElementById('ans-count').textContent = d;
-  });
+  }
+  el.addEventListener('click', handleSelect);
+  el.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    handleSelect.call(this);
+  }, {passive: false});
 });
 function toggleMenu() { document.getElementById('menuDrop').classList.toggle('open'); document.getElementById('menu-pw').value = ''; document.getElementById('menu-err').classList.remove('on'); }
 document.addEventListener('click', e => { if (!document.getElementById('menuBtn').contains(e.target) && !document.getElementById('menuDrop').contains(e.target)) document.getElementById('menuDrop').classList.remove('open'); });
